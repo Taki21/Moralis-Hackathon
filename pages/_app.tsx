@@ -9,7 +9,7 @@ function MyApp({ Component, pageProps }: AppProps) {
     <MoralisProvider appId='lJOarUuAlWplKRCkGjvNNfQl2bY8OFAExeETwJS5' serverUrl='https://h9gw6kcvgoj4.usemoralis.com:2053/server'>
       <div className='flex'>
         <Sidebar/>
-        <div className='w-full bg-[#0A0A0B] text-white'>
+        <div className='w-full relative bg-[#0A0A0B] text-white'>
           <Header/>
           <Component {...pageProps} />
         </div>
