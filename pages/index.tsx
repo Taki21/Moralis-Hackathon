@@ -18,7 +18,7 @@ export default function Home() {
         <main className='w-full'>
           <Intro/>
           <h1 className='text-3xl pt-4'>Trending</h1>
-          <Card/>
+          <Card/> 
         </main>
 
       </div>
