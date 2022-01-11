@@ -2,6 +2,7 @@ import Head from 'next/head'
 import Header from '../components/Header';
 import Sidebar from '../components/Sidebar';
 import Intro from '../components/Intro';
+import { useMoralis } from 'react-moralis'
 
 export default function Home() {
 

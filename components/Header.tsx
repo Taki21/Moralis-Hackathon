@@ -1,5 +1,6 @@
 import Connect from "./Connect"
 import Search from "./Search"
+import { useMoralis } from 'react-moralis'
 
 function Header() {
     return (

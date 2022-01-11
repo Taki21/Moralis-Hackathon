@@ -1,6 +1,7 @@
 import '../styles/globals.css'
 import type { AppProps } from 'next/app'
 import { MoralisProvider } from 'react-moralis'
+import { useMoralis } from 'react-moralis'
 import Header from '../components/Header'
 import Sidebar from '../components/Sidebar'
 

@@ -1,4 +1,9 @@
+import {useMoralis} from 'react-moralis'
+
 function Sidebar() {
+    
+    const {authenticate, authError} = useMoralis()
+
     return (
         <>
             <div className="flex sticky top-0 left-0 h-screen w-48 m-0 flex-col bg-[#0A0A0B] text-white shadow">
