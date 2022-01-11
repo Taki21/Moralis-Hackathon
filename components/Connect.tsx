@@ -14,7 +14,7 @@ function Connect() {
     return (
         <>
             <div>
-                <button onClick={authenticate} className="flex text-2xl px-3 py-3 rounded-2xl shadow-lg bg-[#1C1C1C] text-white hover:bg-[#D3B694] hover:text-white rounded-15xl hover:rounded-xl transition-all duration-600 ease-linear cursor-pointer">
+                <button onClick={() => {authenticate}} className="flex text-2xl px-3 py-3 rounded-2xl shadow-lg bg-[#1C1C1C] text-white hover:bg-[#D3B694] hover:text-white rounded-15xl hover:rounded-xl transition-all duration-600 ease-linear cursor-pointer">
                     {
                         isAuthenticated ? (
                             <p className='text-base pr-2'>{user.get("ethAddress").substring(0,5) + "..." + user.get("ethAddress").substring(38,42)}</p>
