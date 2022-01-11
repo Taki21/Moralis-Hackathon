@@ -3,6 +3,7 @@ import Header from '../components/Header';
 import Sidebar from '../components/Sidebar';
 import Intro from '../components/Intro';
 import { useMoralis } from 'react-moralis'
+import Card from '../components/Card';
 
 export default function Home() {
 
@@ -16,6 +17,8 @@ export default function Home() {
 
         <main className='w-full'>
           <Intro/>
+          <h1 className='text-3xl pt-4'>Trending</h1>
+          <Card/>
         </main>
 
       </div>

@@ -2,7 +2,7 @@ import {useMoralis} from 'react-moralis'
 
 function Sidebar() {
     
-    const {authenticate, authError} = useMoralis()
+    const {isAuthenticated, logout} = useMoralis()
 
     return (
         <>
@@ -34,7 +34,7 @@ function Sidebar() {
                         </div>
                     </div>
 
-                    <div className="group relative flex items-center justify-center h-16 w-16 rounded-2xl my-8 mx-auto shadow-lg bg-[#1C1C1C] text-white hover:bg-[#D3B694] hover:text-white rounded-15xl hover:rounded-xl transition-all duration-300 ease-linear cursor-pointer">
+                    <div onClick={logout} className="group relative flex items-center justify-center h-16 w-16 rounded-2xl my-8 mx-auto shadow-lg bg-[#1C1C1C] text-white hover:bg-[#D3B694] hover:text-white rounded-15xl hover:rounded-xl transition-all duration-300 ease-linear cursor-pointer">
                         <svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" height="2em" width="2em" xmlns="http://www.w3.org/2000/svg"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>                        
                         <span className="group-hover:scale-100 z-50 absolute w-auto p-2 m-2 min-w-max left-24 rounded-md shadow-md text-white bg-[#1C1C1C] text-xs font-bold tansition-all duration-100 scale-0">Logout</span>
                     </div>
