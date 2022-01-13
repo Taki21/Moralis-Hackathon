@@ -8,6 +8,7 @@ import { FileError, FileRejection, useDropzone} from "react-dropzone";
 import { nftContract, nftABI } from '../components/abi/IERC721';
 import { useMoralis } from 'react-moralis';
 
+
 export interface UploadableFile {
     file: File;
     errors: FileError[];
@@ -18,7 +19,15 @@ export default function Home() {
     const { web3, account } = useMoralis();
 
     async function mintNFT() {
-        const contract = web3.eth.Contract(nftABI, nftContract);
+        if(web3) {
+            const contract = new web3.eth.Contract(nftABI, nftContract);
+            
+            try {
+                await contract.methods.createToken().send({from: account});
+            } catch (error) {
+                alert(error);
+            }
+        }
         
     }
 
@@ -32,13 +41,6 @@ export default function Home() {
 
         const {getRootProps, getInputProps} = useDropzone({ onDrop });
     }
-
-// const fileInput = document.getElementById('input');
-// fileInput.onchange = () => {
-//    const selectedFile = fileInput.files[0];
-//    console.log(selectedFile);
-// } 
-// where can i put this JS XD
 
     return (
         <>
