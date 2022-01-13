@@ -2,14 +2,43 @@ import Head from 'next/head'
 import Header from '../components/Header';
 import Sidebar from '../components/Sidebar';
 import Intro from '../components/Intro';
-import { useMoralis } from 'react-moralis'
 import Card from '../components/Card';
+import {useCallback, useState} from "react";
+import { FileError, FileRejection, useDropzone} from "react-dropzone"; 
+import { nftContract, nftABI } from '../components/abi/IERC721';
+import { useMoralis } from 'react-moralis';
+
+export interface UploadableFile {
+    file: File;
+    errors: FileError[];
+}
 
 export default function Home() {
 
-    async function mintNFT() {
+    const { web3, account } = useMoralis();
 
+    async function mintNFT() {
+        const contract = web3.eth.Contract(nftABI, nftContract);
+        
     }
+
+    function uploadSrcFile() { //i think this just makes files drag and droppable lol
+        const [files, setFiles] = useState<UploadableFile[]>([]);
+
+        const onDrop = useCallback((accFiles: File[], rejFiles: FileRejection[]) => {
+            const mappedAcc = accFiles.map((file) => ({file, errors: []}));
+            setFiles((curr) => [...curr, ...mappedAcc, ...rejFiles]);
+        }, []);
+
+        const {getRootProps, getInputProps} = useDropzone({ onDrop });
+    }
+
+// const fileInput = document.getElementById('input');
+// fileInput.onchange = () => {
+//    const selectedFile = fileInput.files[0];
+//    console.log(selectedFile);
+// } 
+// where can i put this JS XD
 
     return (
         <>
@@ -21,7 +50,17 @@ export default function Home() {
 
                 <main className='w-full'>
                     <h1 className='text-2xl'>Create Your NFT</h1>
-                    <>put the upload file btn here</>
+                    
+
+                    
+
+                    <input type="file" id="real-file-button" className="flex text-base px-9 py-3 rounded-2xl shadow-lg bg-[#1C1C1C] text-white hover:bg-[#D3B694] hover:text-white rounded-15xl hover:rounded-xl transition-all duration-600 ease-linear cursor-pointer"></input>
+                    <button id="custom-file-button" className="flex text-base px-9 py-3 rounded-2xl shadow-lg bg-[#1C1C1C] text-white hover:bg-[#D3B694] hover:text-white rounded-15xl hover:rounded-xl transition-all duration-600 ease-linear cursor-pointer">
+                        Upload
+                    </button>
+
+                    <br />
+
                     <button onClick={() => mintNFT()} className="flex text-base px-9 py-3 rounded-2xl shadow-lg bg-[#1C1C1C] text-white hover:bg-[#D3B694] hover:text-white rounded-15xl hover:rounded-xl transition-all duration-600 ease-linear cursor-pointer">
                         Mint
                     </button>
