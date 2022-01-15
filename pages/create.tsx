@@ -3,10 +3,14 @@ import Header from '../components/Header';
 import Sidebar from '../components/Sidebar';
 import Intro from '../components/Intro';
 import Card from '../components/Card';
-import {useCallback, useState} from "react";
+import {ChangeEventHandler, useCallback, useRef, useState} from "react";
 import { FileError, FileRejection, useDropzone} from "react-dropzone"; 
 import { nftContract, nftABI } from '../components/abi/IERC721';
-import { useMoralis } from 'react-moralis';
+import { useMoralis, useMoralisFile } from 'react-moralis';
+import { useForm } from 'react-hook-form';
+import app from 'next/app';
+import axios from 'axios';
+
 
 
 export interface UploadableFile {
@@ -14,32 +18,29 @@ export interface UploadableFile {
     errors: FileError[];
 }
 
-export default function Home() {
+export default function Home(this : any) {
 
-    const { web3, account } = useMoralis();
+    const { web3, Moralis, account } = useMoralis();
+    const { error, isUploading, moralisFile, saveFile } = useMoralisFile();
 
-    async function mintNFT() {
+    async function mintNFT(this: any) {
+        const fileData = this.refs.upload.getInputDOMNode().files[0];
+        console.log(fileData);
+        // bro forget all this file stuff, can u create the NFT without it?
+        // like just pass in fileData :sob: 
         if(web3) {
             const contract = new web3.eth.Contract(nftABI, nftContract);
-            
+            //const fileName = fileData.value.replace(/.*[\/\\]/, '');
+            const file = new Moralis.File("testing.fbx", fileData);
+            await file.saveIPFS();
+            console.log(file._url);
             try {
-                await contract.methods.createToken().send({from: account});
+                //await contract.methods.createToken().send({from: account});
             } catch (error) {
                 alert(error);
             }
         }
         
-    }
-
-    function uploadSrcFile() { //i think this just makes files drag and droppable lol
-        const [files, setFiles] = useState<UploadableFile[]>([]);
-
-        const onDrop = useCallback((accFiles: File[], rejFiles: FileRejection[]) => {
-            const mappedAcc = accFiles.map((file) => ({file, errors: []}));
-            setFiles((curr) => [...curr, ...mappedAcc, ...rejFiles]);
-        }, []);
-
-        const {getRootProps, getInputProps} = useDropzone({ onDrop });
     }
 
     return (
@@ -51,17 +52,12 @@ export default function Home() {
                 </Head>
 
                 <main className='w-full'>
-                    <h1 className='text-2xl'>Create Your NFT</h1>
-                    
+                    <h1 className='text-2xl'>Upload Your NFT</h1>
 
                     
+                    <input ref={(ref) => this.upload = ref} type="file" multiple accept=".obj, .fbx" name="NFT" className="flex text-base px-9 py-3 rounded-2xl shadow-lg bg-[#1C1C1C] text-white hover:bg-[#D3B694] hover:text-white rounded-15xl hover:rounded-xl transition-all duration-600 ease-linear cursor-pointer"/>
 
-                    <input type="file" id="real-file-button" className="flex text-base px-9 py-3 rounded-2xl shadow-lg bg-[#1C1C1C] text-white hover:bg-[#D3B694] hover:text-white rounded-15xl hover:rounded-xl transition-all duration-600 ease-linear cursor-pointer"></input>
-                    <button id="custom-file-button" className="flex text-base px-9 py-3 rounded-2xl shadow-lg bg-[#1C1C1C] text-white hover:bg-[#D3B694] hover:text-white rounded-15xl hover:rounded-xl transition-all duration-600 ease-linear cursor-pointer">
-                        Upload
-                    </button>
-
-                    <br />
+                    <br /> 
 
                     <button onClick={() => mintNFT()} className="flex text-base px-9 py-3 rounded-2xl shadow-lg bg-[#1C1C1C] text-white hover:bg-[#D3B694] hover:text-white rounded-15xl hover:rounded-xl transition-all duration-600 ease-linear cursor-pointer">
                         Mint
