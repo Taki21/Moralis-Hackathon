@@ -1,3 +1,19 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+body { overflow: hidden; }
+
+/*
+OR
+
+html { overflow-y: hidden; }
+
+OR
+
+div#responsible {
+    overflow-y: hidden;
+}
+
+they prolly all work xd
+*/

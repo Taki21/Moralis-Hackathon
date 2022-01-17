@@ -1,4 +1,4 @@
-function Search({placeholder, data}: any) {
+function Search({placeholder, data}) {
     return (
         <>
 

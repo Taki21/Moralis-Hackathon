@@ -13,31 +13,26 @@ import React, { useRef, useState, ChangeEvent } from 'react'
 import * as THREE from 'three'
 import {OBJLoader} from 'three/examples/jsm/loaders/OBJLoader';
 
-export interface UploadableFile {
-    file: File;
-    errors: FileError[];
-}
-
-export default function Home(this : any) {
+export default function Home() {
     
     const { web3, Moralis, account } = useMoralis();
     const { error, isUploading, moralisFile, saveFile } = useMoralisFile();
 
     const [uploadError, setUploadError] = useState('')
-    const [getFile, setFile] = useState<File | undefined>(undefined);
-    const uploadRef = useRef<HTMLInputElement>(null)
+    const [getFile, setFile] = useState(undefined);
+    const uploadRef = useRef(null)
     
     //let nftFile: File = null; // ???
-    let nftFileName: String = "";
+    let nftFileName = "";
     
     const handleUpload = (
-      e: ChangeEvent<HTMLInputElement>
+      e
     ) => {
       if (e.target.files === null) {
         return
       }
     
-      const file: File = e.target.files[0] //ahh this is the actual file we need to store
+      const file = e.target.files[0] //ahh this is the actual file we need to store
       setFile(file);
       
       if (file) {
@@ -66,7 +61,7 @@ export default function Home(this : any) {
     }
 
     async function mintNFT() { 
-        let scene: THREE.Scene, camera, renderer;
+        let scene;
         // cmhere BOIIIII
         console.log("who???");
         console.log("aight so: " + getFile?.name)

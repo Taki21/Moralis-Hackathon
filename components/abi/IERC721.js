@@ -1,6 +1,6 @@
 export const nftContract = '0xf1c9A745f8ec1604b9aB77c235Ea7617C222fA72';
 
-export const nftABI: any = [
+export const nftABI = [
 	{
 		"inputs": [
 			{

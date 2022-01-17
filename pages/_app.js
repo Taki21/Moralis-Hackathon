@@ -1,11 +1,11 @@
 import '../styles/globals.css'
-import type { AppProps } from 'next/app'
+import { AppProps } from 'next/app'
 import { MoralisProvider } from 'react-moralis'
 import { useMoralis } from 'react-moralis'
 import Header from '../components/Header'
 import Sidebar from '../components/Sidebar'
 
-function MyApp({ Component, pageProps }: AppProps) {
+function MyApp({ Component, pageProps }) {
   return (
     <MoralisProvider appId='lJOarUuAlWplKRCkGjvNNfQl2bY8OFAExeETwJS5' serverUrl='https://h9gw6kcvgoj4.usemoralis.com:2053/server'>
       <div className='flex'>
