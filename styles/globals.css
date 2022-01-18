@@ -2,12 +2,14 @@
 @tailwind components;
 @tailwind utilities;
 
-body { overflow: hidden; }
+canvas {
+    max-height: 100vh;
+}
 
-/*
+/* 
 OR
 
-html { overflow-y: hidden; }
+body { overflow: hidden; }
 
 OR
 
