@@ -17,7 +17,7 @@ import { Model, Loader } from "../components/Model"
 
 export default function Home() {
     
-    const { web3, Moralis, account } = useMoralis();
+    const { web3, enableWeb3, Moralis, account } = useMoralis();
     const { error, isUploading, moralisFile, saveFile } = useMoralisFile();
 
     const [uploadError, setUploadError] = useState('')
@@ -61,18 +61,22 @@ export default function Home() {
     }
 
     async function mintNFT() { 
-        let scene;
         // cmhere BOIIIII
         // console.log("who???");
         // console.log("aight so: " + getFile?.name)
 
         if(web3 && getFile != undefined) {
-            const contract = new web3.eth.Contract(nftABI, nftContract);
+            const contract = await new web3.eth.Contract(nftABI, nftContract);
 
             const file = new Moralis.File(getFile.name, getFile);
 
             await file.saveIPFS();
             // console.log("test: " + file.ipfs());
+            try {
+                await contract.methods.createToken(file.ipfs()).send({from: account});
+            } catch (error) {
+                alert(error);
+            }
 
             // Save file reference to Moralis
             const fileObject = new Moralis.Object('fileObject')
@@ -94,11 +98,7 @@ export default function Home() {
               console.log('name of file: ', name)
             })
 
-            try {
-                //await contract.methods.createToken().send({from: account});
-            } catch (error) {
-                alert(error);
-            }
+
         }
         
     }
@@ -110,7 +110,6 @@ export default function Home() {
                 <title>Moralis-Hackathon</title>
                 <link rel='icon' href='/favicon.ico'></link>
                 </Head>
-                <Model/>
                 <main className='w-full'>
                     <h1 className='text-2xl'>Upload Your NFT</h1>
 

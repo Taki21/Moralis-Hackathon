@@ -17,9 +17,19 @@ function Loader() {
 }
 
 export default function Model(props) {
-  const obj = useLoader(OBJLoader, props.url);
-  return (
-    <primitive object={obj}/>
-  );
-}// ONG
+  const obj = useLoader(props.loader, props.url);
+  console.log(props.loader === GLTFLoader)
+  if(props.loader === GLTFLoader) {
+    console.log('joe')
+    return (
+      <primitive object={obj.scene}/>
+    );
+  } else {
+    console.log('L')
+    return (
+      <primitive object={obj}/>
+    );
+  }
+  // does it work withg gltf ok
+}// lets test it out
 

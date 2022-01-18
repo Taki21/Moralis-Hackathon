@@ -5,9 +5,7 @@ function Connect() {
     const {
         authenticate,
         authError,
-        isAuthenticating,
         isAuthenticated,
-        isUnauthenticated,
         user
     } = useMoralis();
 

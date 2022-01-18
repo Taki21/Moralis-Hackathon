@@ -44,7 +44,7 @@ export default function Home() {
               <ambientLight intensity={0.2} />
               <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} />
               <pointLight position={[-10, -10, -10]} />
-                <Model url="https://ipfs.moralis.io:2053/ipfs/QmdbiLJ3hJUCAR3Qh6sWqBhjHopWja7nFxmnJAW5Wx4W9a"/>
+                <Model loader={GLTFLoader} url="https://ipfs.moralis.io:2053/ipfs/QmU1eeLitTwPv377hP1zqSZcvPHKBiqbDjZP6GRJkHNHx7"/>
                 <OrbitControls />
                 <Environment preset="sunset" background />
               </Suspense>
