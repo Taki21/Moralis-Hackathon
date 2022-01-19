@@ -2,7 +2,7 @@ import Head from 'next/head'
 import { Canvas } from "@react-three/fiber";
 import { useLoader } from "@react-three/fiber";
 import { nftContract, nftABI } from '../components/abi/IERC721';
-import { useMoralis, useMoralisFile } from 'react-moralis';
+import { useMoralis, useMoralisFile, useWeb3ExecuteFunction } from 'react-moralis';
 import React, { useRef, useState, ChangeEvent, Suspense } from 'react'
 import {
   Environment,
@@ -23,7 +23,9 @@ export default function Home() {
     const [uploadError, setUploadError] = useState('')
     const [getFile, setFile] = useState(undefined);
     const uploadRef = useRef(null)
-    
+    // const contract = useWeb3ExecuteFunction()
+    const contractProcessor = useWeb3ExecuteFunction();
+
     //let nftFile: File = null; // ???
     let nftFileName = "";
 
@@ -66,17 +68,27 @@ export default function Home() {
         // console.log("aight so: " + getFile?.name)
 
         if(web3 && getFile != undefined) {
-            const contract = await new web3.eth.Contract(nftABI, nftContract);
+            
+            //const contract = await new web3.eth.Contract(nftABI, nftContract);
 
             const file = new Moralis.File(getFile.name, getFile);
 
             await file.saveIPFS();
             // console.log("test: " + file.ipfs());
-            try {
-                await contract.methods.createToken(file.ipfs()).send({from: account});
+            /*try {
+                let options = {
+                  contractAddress: nftContract,
+                  functionName: "createToken",
+                  abi: nftABI,
+                  params: {
+                    tokenURI: file.ipfs()
+                  }
+                }
+
+                await contract.fetch({params: options})
             } catch (error) {
                 alert(error);
-            }
+            }*/
 
             // Save file reference to Moralis
             const fileObject = new Moralis.Object('fileObject')
@@ -87,7 +99,7 @@ export default function Home() {
             // Retrieve file (for testing, u can delete later )
             const query = new Moralis.Query('fileObject')
             query.equalTo('fileName', getFile.name) // fileName depends on NFT 
-            query.find().then(function ([fileObject]) {
+            query.find().then(async function ([fileObject]) {
               const ipfs = fileObject.get('fileData').ipfs()
               const hash = fileObject.get('fileHash')
               const type = fileObject.get('fileType');
@@ -96,10 +108,33 @@ export default function Home() {
               console.log('IPFS hash', hash)
               console.log('type of file: ', type)
               console.log('name of file: ', name)
+
+              const ops = {
+                contractAddress: "0xf1c9A745f8ec1604b9aB77c235Ea7617C222fA72",
+                functionName: "createToken",
+                abi: nftABI, 
+                params : {
+                    tokenURI: ipfs // try now ok
+                },
+                msgValue: Moralis.Units.ETH(0)
+              };
+                
+              await contractProcessor.fetch({
+                  params: ops,
+                  onSuccess: () => {
+                  console.log("success");
+                  },
+                  onError: (error) => {
+                  console.log("error", error);
+                  }
+              });
             })
 
 
         }
+
+        
+    
         
     }
 
