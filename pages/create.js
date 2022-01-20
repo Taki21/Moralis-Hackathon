@@ -14,10 +14,12 @@ import { OBJLoader } from "three/examples/jsm/loaders/OBJLoader";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import { FBXLoader } from "three/examples/jsm/loaders/FBXLoader";
 import { Model, Loader } from "../components/Model"
+import Web3 from 'web3';
+import Moralis from 'moralis';
 
 export default function Home() {
     
-    const { web3, enableWeb3, Moralis, account } = useMoralis();
+    const { web3, enableWeb3, Moralis, account, provider } = useMoralis();
     const { error, isUploading, moralisFile, saveFile } = useMoralisFile();
 
     const [uploadError, setUploadError] = useState('')
@@ -63,32 +65,22 @@ export default function Home() {
     }
 
     async function mintNFT() { 
+      await Moralis.enableWeb3()
+      const web3 = new Web3(Moralis.provider)
         // cmhere BOIIIII
         // console.log("who???");
         // console.log("aight so: " + getFile?.name)
 
         if(web3 && getFile != undefined) {
             
-            //const contract = await new web3.eth.Contract(nftABI, nftContract);
+            const contract = new web3.eth.Contract(nftABI, nftContract);
+            
 
             const file = new Moralis.File(getFile.name, getFile);
-
             await file.saveIPFS();
-            // console.log("test: " + file.ipfs());
-            /*try {
-                let options = {
-                  contractAddress: nftContract,
-                  functionName: "createToken",
-                  abi: nftABI,
-                  params: {
-                    tokenURI: file.ipfs()
-                  }
-                }
-
-                await contract.fetch({params: options})
-            } catch (error) {
-                alert(error);
-            }*/
+            
+            const accounts = await web3.eth.getAccounts();
+            await contract.methods.createToken(file.ipfs()).send({from: accounts[0]});
 
             // Save file reference to Moralis
             const fileObject = new Moralis.Object('fileObject')
@@ -109,27 +101,7 @@ export default function Home() {
               console.log('type of file: ', type)
               console.log('name of file: ', name)
 
-              const ops = {
-                contractAddress: "0xf1c9A745f8ec1604b9aB77c235Ea7617C222fA72",
-                functionName: "createToken",
-                abi: nftABI, 
-                params : {
-                    tokenURI: ipfs // try now ok
-                },
-                msgValue: Moralis.Units.ETH(0)
-              };
-                
-              await contractProcessor.fetch({
-                  params: ops,
-                  onSuccess: () => {
-                  console.log("success");
-                  },
-                  onError: (error) => {
-                  console.log("error", error);
-                  }
-              });
             })
-
 
         }
 
