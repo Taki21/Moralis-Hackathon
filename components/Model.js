@@ -18,14 +18,14 @@ function Loader() {
 
 export default function Model(props) {
   const obj = useLoader(props.loader, props.url);
-  console.log(props.loader === GLTFLoader)
+  //console.log(props.loader === GLTFLoader)
   if(props.loader === GLTFLoader) {
-    console.log('joe')
+    //console.log('joe')
     return (
       <primitive object={obj.scene}/>
     );
   } else {
-    console.log('L')
+    //console.log('L')
     return (
       <primitive object={obj}/>
     );

@@ -17,6 +17,13 @@ import { Model, Loader } from "../components/Model"
 import Web3 from 'web3';
 import Moralis from 'moralis';
 
+import { NFTStorage, File } from 'nft.storage'
+import { pack } from 'ipfs-car/pack';
+
+// using mine for now cus i cant access urs 
+const apiKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweEUzRkQ4ZDYyYTI1OGY3ODEzQkM1MTg1MUNiMTQ3ODg2Mzk0NDM0ODMiLCJpc3MiOiJuZnQtc3RvcmFnZSIsImlhdCI6MTY0Mjg5MzEwNTI5NiwibmFtZSI6InN0YXJiaXRzIn0.wuI_px6tWzssmEctp4mowCUL1FO9NQNnbvPlT1nmgco'
+const client = new NFTStorage({ token: apiKey })
+
 export default function Home() {
     
     const { web3, enableWeb3, Moralis, account, provider } = useMoralis();
@@ -52,7 +59,6 @@ export default function Home() {
           
           nftFileName = file.name;
           fileTypeVar = contents.Type;
-          //console.log("mongus", fileTypeVar)
         }
   
         // e.target.value = ''
@@ -72,16 +78,26 @@ export default function Home() {
         // console.log("aight so: " + getFile?.name)
 
         if(web3 && getFile != undefined) {
+          const fileType = getFile.name.substring(getFile.name.lastIndexOf(".") + 1, getFile.name.length)
             
+            const metadata = await client.store({
+              name: getFile.name,
+              description: "in the metaverse",
+              fileType: fileType,
+              image: getFile,
+            });
+            
+
+            const metadataURI = metadata.url.replace(/^ipfs:\/\//, "")
+            console.log(metadata.url)
+            console.log(metadataURI)
+
             const contract = new web3.eth.Contract(nftABI, nftContract);
             
-
-            const file = new Moralis.File(getFile.name, getFile);
-            await file.saveIPFS();
-            
             const accounts = await web3.eth.getAccounts();
-            await contract.methods.createToken(file.ipfs()).send({from: accounts[0]});
+            await contract.methods.createToken(metadataURI).send({from: accounts[0]});
 
+            /* idk how to use nft storagea nooo xDDD i mean like thats Moralis lol obne sec
             // Save file reference to Moralis
             const fileObject = new Moralis.Object('fileObject')
             fileObject.set('fileName', getFile?.name)
@@ -100,8 +116,7 @@ export default function Home() {
               console.log('IPFS hash', hash)
               console.log('type of file: ', type)
               console.log('name of file: ', name)
-
-            })
+            }) */
 
         }
 
