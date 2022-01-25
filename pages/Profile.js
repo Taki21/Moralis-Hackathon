@@ -1,7 +1,11 @@
 import { nftContract, nftABI } from '../components/abi/IERC721';
 import { useMoralis, useMoralisFile, useMoralisWeb3Api, useNFTBalances } from 'react-moralis';
-import { Card, Image, Tooltip, Modal, Input, Alert, Spin, Button } from "antd";
-import { EditOutlined, EllipsisOutlined, SettingOutlined } from '@ant-design/icons';
+
+import { Card, Avatar, Image, Tooltip, Modal, Input, Alert, Spin, Button } from "antd";
+import { EditOutlined, EllipsisOutlined, SettingOutlined, LoadingOutlined  } from '@ant-design/icons';
+const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
+import "antd/dist/antd.css";
+
 import { useState, useEffect, Suspense } from 'react';
 import { Canvas } from "@react-three/fiber";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
@@ -38,8 +42,10 @@ function Loader() {
 export default function Profile() {
   const [userNFTs, setUserNFTs] = useState([])
   const { enableWeb3, Moralis, isAuthenticated, user} = useMoralis();
+  const [nftsLoaded, setNFTsLoaded] = useState('not-loaded')
   const [loading, setLoading] = useState('not-loaded')
   const [nftURIs, setURIs] = useState([])
+  const [theNFTs, setNFTs] = useState([])
   /*const account = useMoralisWeb3Api();
     const { web3, enableWeb3, Moralis } = useMoralis();
     const { error, isUploading, moralisFile, saveFile } = useMoralisFile();
@@ -47,60 +53,94 @@ export default function Profile() {
     
   async function getUserNFTs () {
     if(isAuthenticated) {
-      const nfts = await Moralis.Web3API.account.getNFTs({chain: 'avalanche testnet', address: user.get("ethAddress") })
+      const nfts = await Moralis.Web3API.account.getNFTs({chain: 'avalanche testnet', address: user.get("ethAddress") }).then(setNFTsLoaded('loaded'))
 
       setUserNFTs(nfts.result)
-      //console.log(nfts.result)
+      //console.log(nfts.result) 
     }
   }
 
   async function getURI() {
+    let uris = []
     let nfts = []
     userNFTs.map(async (nft, index) => {
-      const fullTokenURI = `https://dweb.link/ipfs/${nft.token_uri}` 
-      const meta = await axios.get(fullTokenURI)
-      //console.log(meta)
-      let item = meta.data.image
-      //console.log(item)
-      const uri = `https://dweb.link/ipfs/${item.replace(/^ipfs:\/\//, "")}`
-      //console.log(uri)
-      nfts.push(uri)
-    })
+
+      try {    
+        const fullTokenURI = `https://dweb.link/ipfs/${nft.token_uri.substring(nft.token_uri.lastIndexOf('ipfs')).replace(/^ipfs:\/\//, "")}`    
+        console.log(fullTokenURI) 
+        const meta = await axios.get(fullTokenURI) 
+        if(meta.data.fileType.length != 0) {
+          console.log(meta)
+          console.log("joe", meta.data)   
+          let item = meta.data.image
+          //console.log(item) 
+          const uri = `https://dweb.link/ipfs/${item.replace(/^ipfs:\/\//, "")}`
+          //console.log(uri)
+          console.log('this app a fraud') //💀
+          uris.push(uri)
+          nfts.push(meta.data)
+        } 
+      } catch (e) {
+        console.log("derivative of e", e)
+      }
+    }) 
     //console.log("x", nfts)
-    setURIs(nfts)    
+    setURIs(uris)
+    setNFTs(nfts)
     setLoading('loaded')
-    //console.log(nftURIs) 
+    console.log(nftURIs)
+    console.log(userNFTs)
   }
 
   useEffect(() => {
     getUserNFTs()
     getURI() 
-
+    const id = setInterval(() => {
+      
+    }, 3000);
+    return () => clearInterval(id);
   }, [loading]) 
 
-  if(loading === 'loaded' && !userNFTs.length) return <h1>Loading...</h1> 
+  if(loading === 'loaded' && nftsLoaded === 'loaded' && !userNFTs.length) return <><h1>Loading ... </h1></>
   else {
     return (
-      <div className='w-full m-0 '>
-        {userNFTs.map((nft, index) => (
+      <>
+      <div className='w-full pr-8 m-0 mt-8 text-white h-screen flex justify-between'>
+        {theNFTs.map((nft, index) => (
           <div key={index}>
-            <div className='h-1/2 w-1/4'>
-              <h1>NFTs : {nft.name}</h1>
-              <Canvas>
-                <Suspense fallback={<Loader />}> 
-                <ambientLight intensity={0.2} />
-                <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} />
-                <pointLight position={[-10, -10, -10]} />
-                    <Model loader={OBJLoader} url={nftURIs[index]}/>
-                  <OrbitControls />
-                  <Environment preset="sunset" background />
-                </Suspense>
-              </Canvas>
+            <div className='h-96'>
+            <Card
+              style={{ width: 400 }} 
+              cover={
+                <Canvas>
+                  <Suspense fallback={<Loader />}> 
+                  <ambientLight intensity={0.2} />
+                  <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} />
+                  <pointLight position={[-10, -10, -10]} />
+                    <Model loader={nft.fileType} url={nftURIs[index]}/>
+                    <OrbitControls />
+                    <Environment preset="apartment" background />
+                  </Suspense>
+                </Canvas> 
+              }
+              actions={[
+                <SettingOutlined key="setting" />,
+                <EditOutlined key="edit" />,
+                <EllipsisOutlined key="ellipsis" />,
+              ]}
+            >
+              <Meta
+                avatar={<Avatar src="https://joeschmoe.io/api/v1/random" />}
+                title={nft.name}
+                description="a part of the metaverse"
+              />
+            </Card>
             </div>
           </div>
         ))}
-        
       </div>
+      
+      </>
     )
   }    
 }
