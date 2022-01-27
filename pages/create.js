@@ -85,9 +85,9 @@ export default function Home() {
               description: "in the metaverse",
               fileType: fileType,
               image: getFile,
+              test: getFile,
             });
             
-
             const metadataURI = metadata.url.replace(/^ipfs:\/\//, "")
             console.log(metadata.url)
             console.log(metadataURI)
@@ -118,12 +118,10 @@ export default function Home() {
               console.log('name of file: ', name)
             }) */
 
-        }
-
-        
+        }    
+    }   
     
-        
-    }
+    console.log(getFile)
 
     return (
         <>
@@ -137,7 +135,7 @@ export default function Home() {
 
                     <input
                         type="file"
-                        multiple accept =".gltf, .obj, .fbx"
+                        multiple accept =".gltf, .obj, .fbx, .glb, .mtl"
                         ref={uploadRef}
                         onChange={handleUpload}
                         className="flex text-base px-9 py-3 rounded-2xl shadow-lg bg-[#1C1C1C] text-white hover:bg-[#D3B694] hover:text-white rounded-15xl hover:rounded-xl transition-all duration-600 ease-linear cursor-pointer"

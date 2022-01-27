@@ -9,6 +9,7 @@ import {
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import { OBJLoader } from "three/examples/jsm/loaders/OBJLoader";
 import { FBXLoader } from "three/examples/jsm/loaders/FBXLoader";
+import { MTLLoader } from "three/examples/jsm/loaders/MTLLoader";
 import { useMemo, useEffect, Suspense } from "react";
 import { Mesh } from 'three'
 
@@ -18,25 +19,27 @@ function Loader() {
 }
 
 export default function Model(props) {
-  //console.log(props.loader === GLTFLoader) 
-  if(props.loader === 'gltf') {
-    //console.log('joe')      
+  if(props.loader === 'gltf' || props.loader === 'glb') { 
     const obj = useLoader(GLTFLoader, props.url);
     return (  
       <primitive object={obj.scene} scale={2}/>
     );
   } else if(props.loader === 'obj') {
-    //console.log('L')
-    const obj = useLoader(OBJLoader, props.url);
+    //const materials = useLoader(MTLLoader, props.mtlUrl) // @TODO uhhhhhh mtl shit 
+    const obj = useLoader(OBJLoader, props.url, loader => {
+      //materials.preload()
+      //loader.setMaterials(materials)
+    });
     return (
       <primitive object={obj} scale={2}/> 
     );
-  } else {
+  } else if (props.loader === "fbx") {
     const obj = useLoader(FBXLoader, props.url);
     return (
       <primitive object={obj} scale={2}/> 
     );
+  } else {
+    console.warn("unsupported file type")
   }
   
 }
-

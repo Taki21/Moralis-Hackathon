@@ -4,7 +4,7 @@ import { useMoralis, useMoralisFile, useMoralisWeb3Api, useNFTBalances } from 'r
 import { Card, Avatar, Image, Tooltip, Modal, Input, Alert, Spin, Button } from "antd";
 import { EditOutlined, EllipsisOutlined, SettingOutlined, LoadingOutlined  } from '@ant-design/icons';
 const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
-import "antd/dist/antd.css";
+
 
 import { useState, useEffect, Suspense } from 'react';
 import { Canvas } from "@react-three/fiber";
@@ -94,25 +94,25 @@ export default function Profile() {
 
   useEffect(() => {
     getUserNFTs()
-    getURI() 
-    const id = setInterval(() => {
-      
-    }, 3000);
-    return () => clearInterval(id);
-  }, [loading]) 
-
+    getURI()  
+  }, [loading])  
+ 
   if(loading === 'loaded' && nftsLoaded === 'loaded' && !userNFTs.length) return <><h1>Loading ... </h1></>
   else {
     return (
-      <>
-      <div className='w-full pr-8 m-0 mt-8 text-white h-screen flex justify-between'>
+      <>   
+      <div className='flex items-center'>
+        <h1 className='text-white text-3xl my-4'>My 3D NFTs</h1>      
+        <button className='flex ml-3 max-h-12 text-base px-3 py-2 rounded-2xl shadow-lg bg-[#1C1C1C] text-white hover:bg-[#D3B694] hover:text-white rounded-15xl hover:rounded-xl transition-all duration-600 ease-linear cursor-pointer' onClick={() => (loading === 'not-loaded' ? setLoading('loaded') : setLoading('not-loaded'))}>Refresh NFTs</button> 
+      </div>
+      <div className='w-full pr-8 m-0 mt-4 text-white h-screen flex justify-between'>
         {theNFTs.map((nft, index) => (
           <div key={index}>
             <div className='h-96'>
             <Card
               style={{ width: 400 }} 
               cover={
-                <Canvas>
+                <Canvas > 
                   <Suspense fallback={<Loader />}> 
                   <ambientLight intensity={0.2} />
                   <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} />

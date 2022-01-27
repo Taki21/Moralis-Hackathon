@@ -1,7 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
+@import '~antd/dist/antd.dark.css';
 canvas {
     max-height: 100vh;
     min-height: 40vh;
