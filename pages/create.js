@@ -29,6 +29,16 @@ function Loader() {
   return <Html center>{progress} % loaded</Html>;
 }
 
+function DefaultModel() {
+  return (
+    <mesh
+      scale={2}>
+      <boxGeometry args={[1, 1, 1]} />
+      <meshStandardMaterial color={'orange'} />
+    </mesh>
+  )
+}
+
 export default function Home() {
     
     const { web3, enableWeb3, Moralis, account, provider } = useMoralis();
@@ -124,6 +134,8 @@ export default function Home() {
     
     console.log(getFile)
 
+
+
     return (
         <div className='flex'>
           <div className=''>
@@ -140,11 +152,11 @@ export default function Home() {
                   </Suspense>
                 </Canvas>
               ) : (
-                <Canvas>
+                <Canvas >
                   <Suspense fallback={<Loader />}>
                     <ambientLight intensity={0.2} />
                     <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} />
-                    <Model loader={'obj'} url='/BOX.obj'/>
+                    <DefaultModel/>
                     <OrbitControls />
                     <Environment preset="apartment" background />
                   </Suspense>

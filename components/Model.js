@@ -26,10 +26,7 @@ export default function Model(props) {
     );
   } else if(props.loader === 'obj') {
     //const materials = useLoader(MTLLoader, props.mtlUrl) // @TODO uhhhhhh mtl shit 
-    const obj = useLoader(OBJLoader, props.url, loader => {
-      //materials.preload()
-      //loader.setMaterials(materials)
-    });
+    const obj = useLoader(OBJLoader, props.url)
     return (
       <primitive object={obj} scale={2} normalMap={'https://learnopengl.com/img/advanced-lighting/normal_mapping_normal_map.png '}/> 
     );

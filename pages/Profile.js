@@ -46,6 +46,9 @@ export default function Profile() {
   const [loading, setLoading] = useState('not-loaded')
   const [nftURIs, setURIs] = useState([])
   const [theNFTs, setNFTs] = useState([])
+  const [collectionURL, setcollectionURL] = useState([])
+  const [tokenIDcol, settokenIDcol] = useState([])
+  const [nftTokenIds, setNFTTokenIds] = useState([])
   /*const account = useMoralisWeb3Api();
     const { web3, enableWeb3, Moralis } = useMoralis();
     const { error, isUploading, moralisFile, saveFile } = useMoralisFile();
@@ -55,14 +58,26 @@ export default function Profile() {
     if(isAuthenticated) {
       const nfts = await Moralis.Web3API.account.getNFTs({chain: 'avalanche testnet', address: user.get("ethAddress") }).then(setNFTsLoaded('loaded'))
 
+      let colUrl = []
+      let idCol = []
+
       setUserNFTs(nfts.result)
-      //console.log(nfts.result) 
+      userNFTs.forEach(nft => {
+        colUrl.push(nft.token_address)
+        idCol.push(nft.token_id)
+      });
+
+      setcollectionURL(colUrl)
+      settokenIDcol(idCol)
+
+      console.log("suss", nfts.result) 
     }
   }
 
   async function getURI() {
     let uris = []
     let nfts = []
+    let ids = []
     userNFTs.map(async (nft, index) => {
 
       try {    
@@ -78,6 +93,7 @@ export default function Profile() {
           //console.log(uri)
           console.log('this app a fraud')
           uris.push(uri)
+          ids.push(nft.token_uri.substring(0, nft.token_uri.indexOf("/")))
           nfts.push(meta.data)
         } 
       } catch (e) {
@@ -87,6 +103,7 @@ export default function Profile() {
     //console.log("x", nfts)
     setURIs(uris)
     setNFTs(nfts)
+    setNFTTokenIds(ids)
     setLoading('loaded')
     console.log(nftURIs)
     console.log(userNFTs)
@@ -94,7 +111,7 @@ export default function Profile() {
 
   useEffect(() => {
     getUserNFTs()
-    getURI()  
+    getURI()
   }, [loading])  
  
   if(loading === 'loaded' && nftsLoaded === 'loaded' && !userNFTs.length) return <><h1>Loading ... </h1></>
@@ -131,7 +148,7 @@ export default function Profile() {
               ]}
             >            
             <Link href={{
-                pathname: '/nfts/' + nft.image,
+                pathname: '/nfts/' + collectionURL[index] + "/" + tokenIDcol[index],
                 
             }} key={nft.name} >
               <Meta
