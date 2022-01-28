@@ -31,7 +31,7 @@ export default function Model(props) {
       //loader.setMaterials(materials)
     });
     return (
-      <primitive object={obj} scale={2}/> 
+      <primitive object={obj} scale={2} normalMap={'https://learnopengl.com/img/advanced-lighting/normal_mapping_normal_map.png '}/> 
     );
   } else if (props.loader === "fbx") {
     const obj = useLoader(FBXLoader, props.url);

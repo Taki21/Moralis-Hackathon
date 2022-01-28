@@ -4,7 +4,7 @@ import { useMoralis, useMoralisFile, useMoralisWeb3Api, useNFTBalances } from 'r
 import { Card, Avatar, Image, Tooltip, Modal, Input, Alert, Spin, Button } from "antd";
 import { EditOutlined, EllipsisOutlined, SettingOutlined, LoadingOutlined  } from '@ant-design/icons';
 const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
-
+import Link from 'next/link'
 
 import { useState, useEffect, Suspense } from 'react';
 import { Canvas } from "@react-three/fiber";
@@ -76,7 +76,7 @@ export default function Profile() {
           //console.log(item) 
           const uri = `https://dweb.link/ipfs/${item.replace(/^ipfs:\/\//, "")}`
           //console.log(uri)
-          console.log('this app a fraud') //💀
+          console.log('this app a fraud')
           uris.push(uri)
           nfts.push(meta.data)
         } 
@@ -109,11 +109,12 @@ export default function Profile() {
         {theNFTs.map((nft, index) => (
           <div key={index}>
             <div className='h-96'>
+
             <Card
               style={{ width: 400 }} 
               cover={
-                <Canvas > 
-                  <Suspense fallback={<Loader />}> 
+                <Canvas>
+                  <Suspense fallback={<Loader />}>
                   <ambientLight intensity={0.2} />
                   <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} />
                   <pointLight position={[-10, -10, -10]} />
@@ -121,20 +122,26 @@ export default function Profile() {
                     <OrbitControls />
                     <Environment preset="apartment" background />
                   </Suspense>
-                </Canvas> 
+                </Canvas>
               }
               actions={[
                 <SettingOutlined key="setting" />,
                 <EditOutlined key="edit" />,
                 <EllipsisOutlined key="ellipsis" />,
               ]}
-            >
+            >            
+            <Link href={{
+                pathname: '/nfts/' + nft.image,
+                
+            }} key={nft.name} >
               <Meta
                 avatar={<Avatar src="https://joeschmoe.io/api/v1/random" />}
                 title={nft.name}
                 description="a part of the metaverse"
-              />
+              />            
+            </Link>
             </Card>
+
             </div>
           </div>
         ))}
