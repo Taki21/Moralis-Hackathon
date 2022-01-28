@@ -137,8 +137,41 @@ export default function Home() {
 
 
     return (
-        <div className='flex'>
-          <div className=''>
+        <div className='flex my-4 mr-8 h-5/6'>
+
+          <div className="flex flex-col items-center justify-top p-12 w-full bg-[#101011] rounded-l-3xl">
+              <Head>
+              <title>Moralis-Hackathon</title>
+              <link rel='icon' href='/favicon.ico'></link>
+              </Head>
+              <main className='w-full'>
+                  <h1 className='text-3xl font-bold'>Upload Your NFT</h1>
+
+                  <input className="bg-[#1C1C1C] w-full resize-none rounded-2xl p-4 focus:outline-none mt-8" type="text" placeholder="Name of Your NFT" />
+
+                  <input
+                      type="file"
+                      multiple accept =".gltf, .obj, .fbx, .glb, .mtl"
+                      ref={uploadRef}
+                      onChange={handleUpload}
+                      className="flex text-base px-9 py-3 rounded-2xl shadow-lg bg-[#1C1C1C] text-white hover:bg-[#D3B694] hover:text-white rounded-15xl hover:rounded-xl transition-all duration-600 ease-linear cursor-pointer"
+                      style={{ display: 'none' }}
+                  />
+
+                  <textarea className='bg-[#1C1C1C] w-full h-1/2 resize-none rounded-3xl p-4 focus:outline-none my-4' placeholder='Your 3D NFT Description'/>
+
+                  <button onClick={() => uploadRef.current?.click()} className="flex w-full text-base my-3 px-9 py-3 rounded-2xl shadow-lg bg-[#1C1C1C] text-white hover:bg-[#D3B694] hover:text-white rounded-15xl hover:rounded-xl transition-all duration-600 ease-linear cursor-pointer justify-center">
+                      <>Select Your 3D Model</>
+                  </button>
+
+                  <button onClick={mintNFT} className="flex text-base px-9 py-3 rounded-2xl shadow-lg bg-[#1C1C1C] text-white hover:bg-[#D3B694] hover:text-white rounded-15xl hover:rounded-xl transition-all duration-600 ease-linear cursor-pointer">
+                      Mint Your NFT
+                  </button>
+                  {uploadError ? <p>{uploadError}</p> : null}
+              </main>
+          </div>
+
+          <div className='w-1/2'>
             {
               preview ? (
                 <Canvas>
@@ -165,35 +198,6 @@ export default function Home() {
             }
           </div>
 
-          <div className="flex flex-col items-center justify-top py-2 w-full">
-              <Head>
-              <title>Moralis-Hackathon</title>
-              <link rel='icon' href='/favicon.ico'></link>
-              </Head>
-              <main className='w-full'>
-                  <h1 className='text-2xl'>Upload Your NFT</h1>
-
-                  <input
-                      type="file"
-                      multiple accept =".gltf, .obj, .fbx, .glb, .mtl"
-                      ref={uploadRef}
-                      onChange={handleUpload}
-                      className="flex text-base px-9 py-3 rounded-2xl shadow-lg bg-[#1C1C1C] text-white hover:bg-[#D3B694] hover:text-white rounded-15xl hover:rounded-xl transition-all duration-600 ease-linear cursor-pointer"
-                      style={{ display: 'none' }}
-                  />
-                  <button onClick={() => uploadRef.current?.click()} className="flex text-base px-9 py-3 rounded-2xl shadow-lg bg-[#1C1C1C] text-white hover:bg-[#D3B694] hover:text-white rounded-15xl hover:rounded-xl transition-all duration-600 ease-linear cursor-pointer">
-                      Upload File
-                  </button>
-
-                  <button onClick={mintNFT} className="flex text-base px-9 py-3 rounded-2xl shadow-lg bg-[#1C1C1C] text-white hover:bg-[#D3B694] hover:text-white rounded-15xl hover:rounded-xl transition-all duration-600 ease-linear cursor-pointer">
-                      Mint
-                  </button>
-                  {uploadError ? <p>{uploadError}</p> : null}
-
-                  
-              </main>
-
-          </div>
         </div>
     )
 }
