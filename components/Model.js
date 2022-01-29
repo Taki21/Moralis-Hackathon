@@ -36,7 +36,7 @@ export default function Model(props) {
       <primitive object={obj} scale={2}/> 
     );
   } else {
-    console.warn("unsupported file type")
+    return <></>
   }
   
 }

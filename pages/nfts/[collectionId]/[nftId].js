@@ -22,12 +22,13 @@ function Loader() {
 }
 
 export default function Profile() {
-  const [tokenNFT, setTokenNFT] = useState()
-  const [tokenURI, setTokenURI] = useState()
-  const [tokenType, setTokenType] = useState()
+  const [tokenNFT, setTokenNFT] = useState(undefined)
+  const [tokenURI, setTokenURI] = useState(undefined)
+  const [tokenType, setTokenType] = useState(undefined)
   const { Moralis, enableWeb3, isAuthenticated } = useMoralis();
   const [nftLoaded, setNFTLoaded] = useState('not-loaded')
   const [loading, setLoading] = useState('not-loaded')
+  const [firstLoad, setFirstLoad] = useState(false)
 
   const router = useRouter()
   const { collectionId, nftId } = router.query
@@ -37,58 +38,68 @@ export default function Profile() {
       const options = { address: collectionId, token_id: nftId, chain: "avalanche testnet" };
       const tokenIdMetadata = await Moralis.Web3API.token.getTokenIdMetadata(options);
 
-      setTokenNFT(tokenIdMetadata)
-      setNFTLoaded('loaded')
-      console.log(tokenNFT)
-
+      if(tokenIdMetadata.contract_type === 'ERC721') {
+        setTokenNFT(tokenIdMetadata)
+        setNFTLoaded('loaded')
+        console.log("a", tokenNFT)
+      }
     } 
   }
 
-  async function getTokenURI() {
-    try {    
-        const fullTokenURI = `https://dweb.link/ipfs/${tokenNFT.token_uri.substring(tokenNFT.token_uri.lastIndexOf('ipfs')).replace(/^ipfs:\/\//, "")}`
-        console.log("www", fullTokenURI)
-        const meta = await axios.get(fullTokenURI) 
-        if(fullTokenURI.fileType != 0) {
-            let item = meta.data.image
-            const uri = `https://dweb.link/ipfs/${item.replace(/^ipfs:\/\//, "")}`
-            setTokenURI(uri)
-            setTokenType(meta.data.fileType)
-            console.log(meta.data.fileType)
-            console.log(tokenType)
-            console.log(uri)
-            setLoading('loaded')
-            console.log(loading)  
-        } 
-    } catch (e) {
-        console.log("derivative of e", e)
-    }
-  }
-
+// execute on load
   useEffect(() => {
-    getTokenNFT()
-    getTokenURI()
-  }, [loading])  
+    if(firstLoad === false) {
+      getTokenNFT().then(() => {
+        setFirstLoad(true)
+      })
+    }
+  }, [loading])
+
+  /*async function getTokenURI() {
+    if(tokenNFT.contract_type === 'ERC721') {  
+      const fullTokenURI = `https://dweb.link/ipfs/${tokenNFT.token_uri.substring(tokenNFT.token_uri.lastIndexOf('ipfs')).replace(/^ipfs:\/\//, "")}`
+      console.log("www", fullTokenURI)
+      const meta = await axios.get(fullTokenURI)
+      if(meta.data.fileType !== undefined) {
+          console.log(meta.data)
+          let item = await meta.data.image
+          const uri = `https://dweb.link/ipfs/${item.replace(/^ipfs:\/\//, "")}`
+          setTokenURI(uri)
+          setTokenType(meta.data.fileType)
+          console.log(meta.data.fileType)
+          console.log(tokenType)
+          console.log(uri)
+          console.log(loading)  
+          if(tokenNFT !== undefined) setLoading('loaded')  
+      } 
+    }
+  }*/
    
-  if(loading === 'loaded' && nftLoaded === 'loaded') {
-    return (
+  if(loading === 'not-loaded' && nftLoaded === 'not-loaded') return <button className='flex ml-3 max-h-12 text-base px-3 py-2 rounded-2xl shadow-lg bg-[#1C1C1C] text-white hover:bg-[#D3B694] hover:text-white rounded-15xl hover:rounded-xl transition-all duration-600 ease-linear cursor-pointer' onClick={() => (loading === 'not-loaded' ? setLoading('loaded') : setLoading('not-loaded'))}>Refresh NFTs</button> 
+
+  else {
+    return (  
       <>
         <p></p>
-        <div className='w-1/2'> 
+        <div className='w-1/2'>
+        <button className='flex ml-3 max-h-12 text-base px-3 py-2 rounded-2xl shadow-lg bg-[#1C1C1C] text-white hover:bg-[#D3B694] hover:text-white rounded-15xl hover:rounded-xl transition-all duration-600 ease-linear cursor-pointer' onClick={() => (loading === 'not-loaded' ? setLoading('loaded') : setLoading('not-loaded'))}>Refresh NFTs</button> 
           <Canvas>
-              <Suspense fallback={<Loader />}>
-              <ambientLight intensity={0.2} />
-              <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} />
-              <pointLight position={[-10, -10, -10]} />
-                  <Model loader={tokenType} url={tokenURI}/>
-                  <OrbitControls />
-                  <Environment preset="apartment" background />
-              </Suspense> 
+            <Suspense fallback={<Loader />}>
+            <ambientLight intensity={0.2} />
+            <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} />
+            <pointLight position={[-10, -10, -10]} />
+
+                  
+                  <></>
+                
+                <OrbitControls />
+                <Environment preset="apartment" background />
+            </Suspense> 
           </Canvas>
         </div>
       </>
     )
-  } else return <h1>Loading...</h1>
+  }
 } 
 
 /* 
