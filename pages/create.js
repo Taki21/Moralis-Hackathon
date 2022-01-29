@@ -66,6 +66,7 @@ export default function Home() {
     
       const file = e.target.files[0] //ahh this is the actual file we need to store
       setFile(file);
+      setPreview(true);
       
       if (file) { 
 

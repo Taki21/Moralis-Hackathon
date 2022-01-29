@@ -1,44 +1,36 @@
-import { useMoralis } from 'react-moralis';
-import { useState } from 'react';
-import { useRouter } from 'next/router';
-// all of this is BAD!!!!!!!! 
-function Page() {
-  // Render data...
-
-  const router = useRouter()
-  const { collectionID, tokenID } = router.query
-
-  console.log(collectionID, tokenID)
+export default function Character({ character }) {
   return (
     <div>
-      <h1>a</h1>
-      <p>b</p>
+      <img src={character.photoUrl} alt="" />
+      <div>
+        <h1>{ character.name }</h1>
+        <p>Affiliation: { character.affiliation }</p>
+      </div>
     </div>
-  );
+  )
 }
 
-function fetchNFTs() {
-  const [userNFTs, setUserNFTs] = useState([])
-  const { Moralis, isAuthenticated, user} = useMoralis();
-
-  async function getUserNFTs () {
-    if(isAuthenticated) {
-      const nfts = await Moralis.Web3API.account.getNFTs({chain: 'avalanche testnet', address: user.get("ethAddress") }).then(setNFTsLoaded('loaded'))
-
-      setUserNFTs(nfts.result)
+export async function getStaticProps({ params }) {
+  const characterId = params.characterId.replace(/\-/g, '+')
+  const results = await fetch(`https://last-airbender-api.herokuapp.com/api/v1/characters?name=${characterId}`).then(res => res.json());
+  return {
+    props: {
+      character: results[0]
     }
   }
-
-  return userNFTs
 }
 
-export async function getServerSideProps({query: {page}, searchQuery}){
-  console.log(query.search)
+export async function getStaticPaths() {
+  const characters = await fetch('https://last-airbender-api.herokuapp.com/api/v1/characters?perPage=500').then(res => res.json());
   return {
-      props: {
-          data: data
+    paths: characters.map(character => {
+      const characterId = character.name.toLowerCase().replace(/ /g, '-');
+      return {
+        params: {
+          characterId
+        }
       }
+    }),
+    fallback: false
   }
 }
-
-export default Page
