@@ -21,43 +21,42 @@ function Loader() {
   return <Html center>{progress} % loaded</Html>;
 }
 
-export default function Profile() {
-  const [tokenNFT, setTokenNFT] = useState(undefined)
+Profile.getInitialProps = async (context) => {
+  const address = context.query.collectionId
+  const id = context.query.nftId
+  const respone = await fetch('http://localhost:3000/api/'+ address +'/'+ id)
+  const data = await respone.json()
+
+  return {
+    nft: data
+  }
+}
+
+export default function Profile(nft) {
+  //const [tokenNFT, setTokenNFT] = useState(undefined)
   const [tokenURI, setTokenURI] = useState(undefined)
   const [tokenType, setTokenType] = useState(undefined)
   const { Moralis, enableWeb3, isAuthenticated } = useMoralis();
-  const [nftLoaded, setNFTLoaded] = useState('not-loaded')
+  const [nftLoaded, setNFTLoaded] = useState('not-loaded') 
   const [loading, setLoading] = useState('not-loaded')
   const [firstLoad, setFirstLoad] = useState(false)
 
   const router = useRouter()
   const { collectionId, nftId } = router.query
     
-  async function getTokenNFT () {
-    if(isAuthenticated) {
-      const options = { address: collectionId, token_id: nftId, chain: "avalanche testnet" };
-      const tokenIdMetadata = await Moralis.Web3API.token.getTokenIdMetadata(options);
+  console.log('ok', nft) 
 
-      if(tokenIdMetadata.contract_type === 'ERC721') {
-        setTokenNFT(tokenIdMetadata)
-        setNFTLoaded('loaded')
-        console.log("a", tokenNFT)
-      }
-    } 
-  }
-
-// execute on load
+// call getTokenNFT() when the component is loaded
   useEffect(() => {
-    if(firstLoad === false) {
-      getTokenNFT().then(() => {
-        setFirstLoad(true)
-      })
-    }
-  }, [loading])
+    getTokenURI()
+  }, [loading]) 
 
-  /*async function getTokenURI() {
-    if(tokenNFT.contract_type === 'ERC721') {  
-      const fullTokenURI = `https://dweb.link/ipfs/${tokenNFT.token_uri.substring(tokenNFT.token_uri.lastIndexOf('ipfs')).replace(/^ipfs:\/\//, "")}`
+
+
+  async function getTokenURI() {
+    console.log('bruh', nft.nft)
+    if(nft.nft.tokenIdMetadata.contract_type === 'ERC721') {  
+      const fullTokenURI = `https://dweb.link/ipfs/${nft.nft.tokenIdMetadata.token_uri.substring(nft.nft.tokenIdMetadata.token_uri.lastIndexOf('ipfs')).replace(/^ipfs:\/\//, "")}`
       console.log("www", fullTokenURI)
       const meta = await axios.get(fullTokenURI)
       if(meta.data.fileType !== undefined) {
@@ -70,26 +69,24 @@ export default function Profile() {
           console.log(tokenType)
           console.log(uri)
           console.log(loading)  
-          if(tokenNFT !== undefined) setLoading('loaded')  
+          setLoading('loaded')  
       } 
     }
-  }*/
+  }
    
-  if(loading === 'not-loaded' && nftLoaded === 'not-loaded') return <button className='flex ml-3 max-h-12 text-base px-3 py-2 rounded-2xl shadow-lg bg-[#1C1C1C] text-white hover:bg-[#D3B694] hover:text-white rounded-15xl hover:rounded-xl transition-all duration-600 ease-linear cursor-pointer' onClick={() => (loading === 'not-loaded' ? setLoading('loaded') : setLoading('not-loaded'))}>Refresh NFTs</button> 
-
+  if(loading === 'not-loaded' && nftLoaded === 'not-loaded') return <h1>Loading...</h1>
   else {
     return (  
       <>
         <p></p>
         <div className='w-1/2'>
-        <button className='flex ml-3 max-h-12 text-base px-3 py-2 rounded-2xl shadow-lg bg-[#1C1C1C] text-white hover:bg-[#D3B694] hover:text-white rounded-15xl hover:rounded-xl transition-all duration-600 ease-linear cursor-pointer' onClick={() => (loading === 'not-loaded' ? setLoading('loaded') : setLoading('not-loaded'))}>Refresh NFTs</button> 
           <Canvas>
             <Suspense fallback={<Loader />}>
             <ambientLight intensity={0.2} />
             <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} />
             <pointLight position={[-10, -10, -10]} />
 
-                  
+                <Model loader={tokenType} url={tokenURI}/>
                   <></>
                 
                 <OrbitControls />

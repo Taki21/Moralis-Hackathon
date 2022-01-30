@@ -46,6 +46,7 @@ export default function Home() {
 
     const [uploadError, setUploadError] = useState('')
     const [getFile, setFile] = useState(undefined);
+    const [fileType, setFileType] = useState()
     const [textures, setTextures] = useState([]);
     const [preview, setPreview] = useState(false);
     const uploadRef = useRef(null)
@@ -66,7 +67,9 @@ export default function Home() {
     
       const file = e.target.files[0] //ahh this is the actual file we need to store
       setFile(file);
-      setPreview(true);
+      console.log(file)
+      setFileType(file.name.substring(file.name.indexOf(".") + 1))
+      //setPreview(true);
       
       if (file) { 
 
@@ -106,9 +109,12 @@ export default function Home() {
               test: getFile,
             });
             
+            setFileType(fileType)
+            console.log("in mint", metadata.url)
+
             const metadataURI = metadata.url.replace(/^ipfs:\/\//, "")
             console.log(metadata.url)
-            console.log(metadataURI)
+            console.log("uri??",)
 
             const contract = new web3.eth.Contract(nftABI, nftContract);
             
@@ -133,7 +139,7 @@ export default function Home() {
       console.log(metadataURI)
     }
     
-    console.log(getFile)
+    //console.log(getFile)
 
 
 
@@ -180,7 +186,7 @@ export default function Home() {
                   <ambientLight intensity={0.2} />
                   <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} />
                   <pointLight position={[-10, -10, -10]} />
-                    <Model loader={nft.fileType} url={nftURIs[index]}/>
+                    <Model loader={fileType} url={getFile}/>
                     <OrbitControls />
                     <Environment preset="apartment" background />
                   </Suspense>
