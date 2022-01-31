@@ -1,4 +1,4 @@
-export const nftContract = '0x022929Eaa06073291Df9aF894302C9D318FA33CE';
+export const nftContract = '0xc6EAa3C0B27e73206CA29011D166370c82e31b0a';
 
 export const nftABI = [
 	{

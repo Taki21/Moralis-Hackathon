@@ -40,6 +40,6 @@ export default function Marketplace() {
     }, []) 
 
     return (
-        <h1 className="text-3xl">Marketplace</h1>
+        <h1 className="text-3xl mt-4">Marketplace</h1>
     )
 }

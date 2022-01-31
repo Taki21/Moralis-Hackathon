@@ -138,6 +138,7 @@ export default function Home() {
             nftData.set('tokenId', tokenId);
             nftData.set('price', price);
             nftData.set('description', description);
+            nftData.set('loader', fileType);
             nftData.set('metadata', metadata.url);
             nftData.set('model', `https://dweb.link/ipfs/${metadata.data.image.href.replace(/^ipfs:\/\//, "")}`);
             nftData.set('color', `https://dweb.link/ipfs/${metadata.data.color.href.replace(/^ipfs:\/\//, "")}`);
