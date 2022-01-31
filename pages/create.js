@@ -21,7 +21,7 @@ import axios from 'axios';
 import { NFTStorage, File } from 'nft.storage'
 import { pack } from 'ipfs-car/pack';
 
-// using mine for now cus i cant access urs 
+// dakotas 
 const apiKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweEUzRkQ4ZDYyYTI1OGY3ODEzQkM1MTg1MUNiMTQ3ODg2Mzk0NDM0ODMiLCJpc3MiOiJuZnQtc3RvcmFnZSIsImlhdCI6MTY0Mjg5MzEwNTI5NiwibmFtZSI6InN0YXJiaXRzIn0.wuI_px6tWzssmEctp4mowCUL1FO9NQNnbvPlT1nmgco'
 const client = new NFTStorage({ token: apiKey })
 
@@ -62,7 +62,11 @@ export default function Home() {
     const [normalTexture, setNormalTexture] = useState(undefined)
     const [roughTexture, setRoughTexture] = useState(undefined)
 
+    // input fields
     const [price, setPrice] = useState('0')
+    const [name, setName] = useState('')
+    const [description, setDescription] = useState('')
+
     const [txres, setTxres] = useState(undefined)
 
     const uploadRef = useRef(null)
@@ -91,11 +95,9 @@ export default function Home() {
     async function mintNFT() { 
       await Moralis.enableWeb3()
       const web3 = new Web3(Moralis.provider)
-        // cmhere BOIIIII
-        // console.log("who???");
-        // console.log("aight so: " + getFile?.name)
 
-        if(web3 && getFile != undefined) {
+        if(web3 && getFile !== undefined) {
+          console.log('mint workin?')
           const fileType = getFile.name.substring(getFile.name.lastIndexOf(".") + 1, getFile.name.length)
             
             const metadata = await client.store({
@@ -109,7 +111,7 @@ export default function Home() {
             });
             
             setFileType(fileType)
-            console.log("in mint", metadata.url)
+            console.log("in mint", metadata)
 
             const contract = new web3.eth.Contract(nftABI, nftContract);
             const market = new web3.eth.Contract(marketABI, marketAddress);
@@ -117,7 +119,7 @@ export default function Home() {
             const accounts = await web3.eth.getAccounts();
 
             console.log('price: ', price)
-            const mintTx = await contract.methods.createToken(metadataURI).send({from: accounts[0]}, function(error, receipt) {
+            const mintTx = await contract.methods.createToken(metadata.url).send({from: accounts[0]}, function(error, receipt) {
               console.log(receipt)
               setTxres(receipt)
               return receipt
@@ -127,18 +129,50 @@ export default function Home() {
             console.log("tokenID", tokenId)
             const fee = await market.methods.getListingPrice().call({from: accounts[0]});
             console.log('listingfee', fee)
-            //const tokenId = 
 
             await market.methods.createMarketItem(nftContract, tokenId, web3.utils.toWei(price, 'ether')).send({from: accounts[0], value: fee});
-            /*const NFTData = Moralis.Object.extend('NFTData');
-            const nftData = new NFTData();*/
+            
+            const NFTData = Moralis.Object.extend('NFTData');
+            const nftData = new NFTData(); 
+            nftData.set('name', name);
+            nftData.set('tokenId', tokenId);
+            nftData.set('price', price);
+            nftData.set('description', description);
+            nftData.set('metadata', metadata.url);
+            nftData.set('model', `https://dweb.link/ipfs/${metadata.data.image.href.replace(/^ipfs:\/\//, "")}`);
+            nftData.set('color', `https://dweb.link/ipfs/${metadata.data.color.href.replace(/^ipfs:\/\//, "")}`);
+            nftData.set('normal', `https://dweb.link/ipfs/${metadata.data.normal.href.replace(/^ipfs:\/\//, "")}`);
+            nftData.set('roughness', `https://dweb.link/ipfs/${metadata.data.roughness.href.replace(/^ipfs:\/\//, "")}`);
+            nftData.set('sold', false);
+            nftData.set('seller', accounts[0]);
+            nftData.set('contract', nftContract);
+            await nftData.save()
         }    
     }
     
     async function previewModel() {
       if (getFile === undefined) return
+
+      console.log('tempurl', URL.createObjectURL(getFile))
+      setURI(URL.createObjectURL(getFile))
+
+      if(colorTexture !== undefined) {
+        console.log('colormap', URL.createObjectURL(colorTexture))
+        setCURI(URL.createObjectURL(colorTexture))
+      }
+
+      if(normalTexture !== undefined) {
+        console.log('nmap', URL.createObjectURL(normalTexture))
+        setNURI(URL.createObjectURL(normalTexture))
+      }
+
+      if(roughTexture !== undefined) {
+        console.log('rmap', URL.createObjectURL(roughTexture))
+        setRURI(URL.createObjectURL(roughTexture))
+      }
+      
       //if (preview) return
-      const type = getFile.name.substring(getFile.name.lastIndexOf(".") + 1, getFile.name.length)
+      /*const type = getFile.name.substring(getFile.name.lastIndexOf(".") + 1, getFile.name.length)
       const metadata = await client.store({
         name: getFile.name,
         description: "in the metaverse",
@@ -180,8 +214,8 @@ export default function Home() {
       console.log("_curi state", _curi)
       console.log("_nuri state", _nuri)
       console.log("_ruri state", _ruri)
-
-      // setPreview(true);   
+      */
+      setPreview(true);
     }
 
     const handleCTextureUpload = async (e) => {
@@ -227,7 +261,7 @@ export default function Home() {
                   <h1 className='text-3xl font-bold'>Upload Your NFT</h1>
 
                   <div className='flex'>
-                    <input className="bg-[#1C1C1C] w-3/4 resize-none rounded-2xl p-4 focus:outline-none mt-8 mr-4" type="text" placeholder="Name of Your NFT" />
+                    <input className="bg-[#1C1C1C] w-3/4 resize-none rounded-2xl p-4 focus:outline-none mt-8 mr-4" type="text" placeholder="Name of Your NFT" onChange={(e) => setName(e.target.value) }/>
                     
                     <input type="number" id="price" name="price" onChange={(e) => setPrice(e.target.value)}
                       min="0" max="999" placeholder="Price" className="bg-[#1C1C1C] w-1/4 resize-none rounded-2xl p-4 focus:outline-none mt-8"
@@ -264,7 +298,7 @@ export default function Home() {
                           className="hidden"
                   />
 
-                  <textarea className='bg-[#1C1C1C] w-full h-1/2 resize-none rounded-3xl p-4 focus:outline-none my-4' placeholder='Your 3D NFT Description'/>
+                  <textarea className='bg-[#1C1C1C] w-full h-1/2 resize-none rounded-3xl p-4 focus:outline-none my-4' placeholder='Your 3D NFT Description' onChange={(e) => setDescription(e.target.value)} />
 
                   <button id="btn" onClick={() => uploadRef.current?.click()} className="flex w-full text-base my-3 px-9 py-3 rounded-2xl shadow-lg bg-[#1C1C1C] text-white hover:bg-[#D3B694] hover:text-white rounded-15xl hover:rounded-xl transition-all duration-600 ease-linear cursor-pointer justify-center">
                       <>Select Your 3D Model</>
@@ -296,13 +330,10 @@ export default function Home() {
             {
               preview === true && _guri !== undefined ? (
                 <>
-                  {console.log("_guri", _guri), console.log('fileType', fileType)}
+                  {/*console.log("_guri", _guri), console.log('fileType', fileType)*/}
                   <Canvas>
                     <Suspense fallback={<Loader />}>
-                    <ambientLight intensity={0.2} />
-                    <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} />
-                    <pointLight position={[-10, -10, -10]} />
-                      <Model loader={fileType} url={_guri}/>
+                      <Model loader={fileType} url={_guri} colorMap={_curi} normalMap={_nuri} roughnessMap={_ruri} />
                       <OrbitControls autoRotate />
                       <Environment preset="apartment" background />
                     </Suspense>

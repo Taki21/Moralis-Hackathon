@@ -6,17 +6,3 @@ canvas {
     max-height: 100vh;
     min-height: 50vh;
 }
-
-/* 
-OR
-
-body { overflow: hidden; }
-
-OR
-
-div#responsible {
-    overflow-y: hidden;
-}
-
-they prolly all work xd
-*/

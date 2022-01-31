@@ -14,7 +14,7 @@ function Sidebar() {
                     </div>
 
                     <div>
-                        <Link href='/'> 
+                        <Link href='/Profile'> 
                             <a>
                                 <div className="group relative flex items-center justify-center h-16 w-16 rounded-2xl my-8 mx-auto shadow-lg bg-[#1C1C1C] text-white hover:bg-[#D3B694] hover:text-white rounded-15xl hover:rounded-xl transition-all duration-600 ease-linear cursor-pointer">
                                     <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 20 20" height="2em" width="2em" xmlns="http://www.w3.org/2000/svg"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path></svg>
@@ -32,11 +32,11 @@ function Sidebar() {
                             </a>
                         </Link>
 
-                        <Link href='/bookmark'> 
+                        <Link href='/create'> 
                             <a>
                                 <div className="group relative flex items-center justify-center h-16 w-16 rounded-2xl my-8 mx-auto shadow-lg bg-[#1C1C1C] text-white hover:bg-[#D3B694] hover:text-white rounded-15xl hover:rounded-xl transition-all duration-300 ease-linear cursor-pointer">
                                     <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 16 16" height="2em" width="2em" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M3 3a2 2 0 012-2h6a2 2 0 012 2v12l-5-3-5 3V3z" clip-rule="evenodd"></path></svg>
-                                    <span className="group-hover:scale-100 z-50 absolute w-auto p-2 m-2 min-w-max left-24 rounded-md shadow-md text-white bg-[#1C1C1C] text-xs font-bold tansition-all duration-100 scale-0">Saved</span>
+                                    <span className="group-hover:scale-100 z-50 absolute w-auto p-2 m-2 min-w-max left-24 rounded-md shadow-md text-white bg-[#1C1C1C] text-xs font-bold tansition-all duration-100 scale-0">Create</span>
                                 </div>
                             </a>
                         </Link>

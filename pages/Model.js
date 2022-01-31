@@ -17,7 +17,7 @@ function Loader() {
 const Model = () => {
   const gltf = useLoader(GLTFLoader, "https://ipfs.moralis.io:2053/ipfs/QmU1eeLitTwPv377hP1zqSZcvPHKBiqbDjZP6GRJkHNHx7");
   return <primitive object={gltf.scene} scale={1} />;
-};// ONG
+};
 
 export default function App() {
   return (

@@ -119,16 +119,16 @@ export default function Profile() {
     return (
       <>   
       <div className='flex items-center'>
-        <h1 className='text-white text-3xl my-4'>My 3D NFTs</h1>      
+        <h1 className='text-white text-3xl my-4'>My Minted NFTs</h1>      
         <button className='flex ml-3 max-h-12 text-base px-3 py-2 rounded-2xl shadow-lg bg-[#1C1C1C] text-white hover:bg-[#D3B694] hover:text-white rounded-15xl hover:rounded-xl transition-all duration-600 ease-linear cursor-pointer' onClick={() => (loading === 'not-loaded' ? setLoading('loaded') : setLoading('not-loaded'))}>Refresh NFTs</button> 
       </div>
-      <div className='w-full pr-8 m-0 mt-4 text-white h-screen flex justify-between'>
+      <div className='w-full pr-8 m-0 mt-4 text-white flex justify-between flex-wrap mb-8'>
         {theNFTs.map((nft, index) => (
-          <div key={index}>
+          <div key={index} className='mb-8'>
             <div className='h-96'>
 
             <Card
-              style={{ width: 400 }} 
+              style={{ width: 400 }}
               cover={
                 <Canvas>
                   <Suspense fallback={<Loader />}>

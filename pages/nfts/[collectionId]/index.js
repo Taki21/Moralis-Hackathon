@@ -76,8 +76,7 @@ export default function Profile(getNFTs) {
 
   console.log(getNFTs)
  
-  
-  //console.log('cuh', theNFTs)
+
  
   if(loading === 'loading') return <h1>Loading ... </h1>
   else {
@@ -86,7 +85,7 @@ export default function Profile(getNFTs) {
         <div className='flex items-center'>
           <h1 className='text-white text-3xl my-4'>NFTs from {collectionId}</h1>
           <button className='flex ml-3 max-h-12 text-base px-3 py-2 rounded-2xl shadow-lg bg-[#1C1C1C] text-white hover:bg-[#D3B694] hover:text-white rounded-15xl hover:rounded-xl transition-all duration-600 ease-linear cursor-pointer' onClick={() => (loading === 'not-loaded' ? setLoading('loaded') : setLoading('not-loaded'))}>Refresh NFTs</button>       
-        </div>
+        </div> 
 
         <div className='w-full pr-8 m-0 mt-4 text-white flex justify-between flex-wrap mb-8'>
         {getNFTs.getNFTs.map((nft, index) => ( 
@@ -118,7 +117,7 @@ export default function Profile(getNFTs) {
               <Link href={{
                   pathname: '/nfts/' + collectionURL[index] + "/" + tokenIDcol[index],
                   
-              }} key={nft.name} >
+              }} key={nft.name}>
                 <Meta
                   avatar={<Avatar src="https://joeschmoe.io/api/v1/random" />}
                   title={nft.value.nft.name}

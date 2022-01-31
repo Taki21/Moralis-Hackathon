@@ -7,7 +7,3 @@ export default async function handler(req, res) {
     const allNfts = await Moralis.Web3API.token.getAllTokenIds(options);
     res.status(200).json({ allNfts })
 }
-
-
-
-// 

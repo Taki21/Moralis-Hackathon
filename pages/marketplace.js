@@ -33,7 +33,6 @@ export default function Marketplace() {
 
         const data = await market.methods.fetchMarketItems().call({from: accounts[0]});
         console.log(data)
-
     }
 
     useEffect(() => {

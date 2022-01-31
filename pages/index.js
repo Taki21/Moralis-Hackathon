@@ -34,22 +34,11 @@ export default function Home() {
 
         <main className='w-full'>
           <Intro/>
-          <h1 className='text-3xl pt-4'>Trending</h1>
+          <h1 className='text-3xl pt-4'>Recent 3D NFTs</h1>
 
           <Card/> 
           
-          <div className='h-screen w-1/2'>
-            <Canvas>
-              <Suspense fallback={<Loader />}> 
-              <ambientLight intensity={0.2} />
-              <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} />
-              <pointLight position={[-10, -10, -10]} />
-                <Model loader={GLTFLoader} url="https://ipfs.moralis.io:2053/ipfs/QmU1eeLitTwPv377hP1zqSZcvPHKBiqbDjZP6GRJkHNHx7"/>
-                <OrbitControls />
-                <Environment preset="sunset" background />
-              </Suspense>
-            </Canvas>
-          </div>
+
           
         </main>
 
