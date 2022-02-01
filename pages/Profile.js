@@ -156,7 +156,7 @@ export default function Profile() {
                   <pointLight position={[-10, -10, -10]} />
                     <Model loader={nft.fileType} url={nftURIs[index]} colorMap={colorMaps[index]} normalMap={normalMaps[index]} roughnessMap={roughnessMaps[index]}/>
                     <OrbitControls />
-                    <Environment preset="apartment" background />
+                    <color attach='background' args={['#121212']}></color>
                   </Suspense>
                 </Canvas>
               }
