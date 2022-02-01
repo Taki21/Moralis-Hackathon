@@ -23,7 +23,7 @@ function Loader() {
 
 Profile.getInitialProps = async (context) => {
   const address = context.query.collectionId
-  const respone = await fetch('http://localhost:3000/api/'+ address)
+  const respone = await fetch('https://moralis-hackathon-zeta.vercel.app/api/'+ address)
   const data = await respone.json()
 
   const promises = []
