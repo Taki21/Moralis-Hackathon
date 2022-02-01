@@ -14,7 +14,7 @@ function Sidebar() {
                     </div>
 
                     <div>
-                        <Link href='/Profile'> 
+                        <Link href='../'> 
                             <a>
                                 <div className="group relative flex items-center justify-center h-16 w-16 rounded-2xl my-8 mx-auto shadow-lg bg-[#1C1C1C] text-white hover:bg-[#D3B694] hover:text-white rounded-15xl hover:rounded-xl transition-all duration-600 ease-linear cursor-pointer">
                                     <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 20 20" height="2em" width="2em" xmlns="http://www.w3.org/2000/svg"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path></svg>

@@ -38,7 +38,7 @@ export default function Marketplace() {
       Moralis.start({appId: 'lJOarUuAlWplKRCkGjvNNfQl2bY8OFAExeETwJS5', serverUrl: 'https://h9gw6kcvgoj4.usemoralis.com:2053/server'});
       const query = new Moralis.Query('NFTData');
       const results = await query.find();
-      console.log('nftz', results)
+      //console.log('nftz', results)
       setNFTs(results)
     }
   
@@ -46,7 +46,7 @@ export default function Marketplace() {
       x()
     }, [])
   
-    console.log('nftz state', theNFTs)
+    //console.log('nftz state', theNFTs)
   
     return (
       <>
@@ -65,7 +65,7 @@ export default function Marketplace() {
                   <div className='h-96'>
   
                   <Card
-                    style={{ width: 400 }}
+                    style={{ width: 400, borderColor: '#141414' }}
                     cover={
                       <Canvas>
                         <Suspense fallback={<Loader />}>
@@ -78,11 +78,7 @@ export default function Marketplace() {
                         </Suspense>
                       </Canvas>
                     }
-                    actions={[
-                      <SettingOutlined key="setting" />,
-                      <EditOutlined key="edit" />,
-                      <EllipsisOutlined key="ellipsis" />,
-                    ]}
+
                   >            
                   <Link href={{
                       pathname: '/nfts/' + nft.attributes.contract + "/" + nft.attributes.tokenId,
@@ -90,7 +86,7 @@ export default function Marketplace() {
                   }} key={nft.name} >
                     <Meta
                       avatar={<Avatar src="https://joeschmoe.io/api/v1/random" />}
-                      title={nft.attributes.name}
+                      title={'\"' + nft.attributes.name + '\"' + " for " + nft.attributes.price + ' AVAX'}
                       description={nft.attributes.description}
                     />            
                   </Link>
@@ -99,6 +95,8 @@ export default function Marketplace() {
                   </div>
                 </div>
               ))}
+
+              {theNFTs.map((index) => (<div style={{width:400}}></div>))}
             </div>
           </main>
   

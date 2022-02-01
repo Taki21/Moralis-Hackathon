@@ -34,17 +34,17 @@ Profile.getInitialProps = async (context) => {
       const cid = cidbase.substring(0, cidbase.indexOf('/'))
       //console.log('x', cid)
       const fullTokenURI = `https://${cid}.ipfs.dweb.link/metadata.json`    
-      console.log(fullTokenURI) 
+      //console.log(fullTokenURI) 
       promises.push(fullTokenURI)
     }
   })
 
-  console.log(promises)
+  //console.log(promises)
 
   const items = await Promise.allSettled(promises.map(async (nft, index) => { 
     const meta = await axios.get(nft) 
     if(meta.data.fileType.length > 0) {
-      console.log(meta.data.fileType)
+      //console.log(meta.data.fileType)
       let item = meta.data.image
       const uri = `https://dweb.link/ipfs/${item.replace(/^ipfs:\/\//, "")}`
       let r = {
@@ -74,7 +74,7 @@ export default function Profile(getNFTs) {
   const router = useRouter()
   const { collectionId } = router.query
 
-  console.log(getNFTs)
+  //console.log(getNFTs)
  
 
  

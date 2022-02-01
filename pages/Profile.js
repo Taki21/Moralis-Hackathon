@@ -49,11 +49,14 @@ export default function Profile() {
   const [collectionURL, setcollectionURL] = useState([])
   const [tokenIDcol, settokenIDcol] = useState([])
   const [nftTokenIds, setNFTTokenIds] = useState([])
+  const [colorMaps, setColorMaps] = useState([])
+  const [normalMaps, setNormalMaps] = useState([])
+  const [roughnessMaps, setRoughnessMaps] = useState([])
   /*const account = useMoralisWeb3Api();
     const { web3, enableWeb3, Moralis } = useMoralis();
     const { error, isUploading, moralisFile, saveFile } = useMoralisFile();
     const { getNFTBalances, data, isLoading, isFetching } = useNFTBalances();*/
-    
+
   async function getUserNFTs () {
     if(isAuthenticated) {
       const nfts = await Moralis.Web3API.account.getNFTsForContract({chain: 'avalanche testnet', address: user.get("ethAddress"), token_address: nftContract }).then(setNFTsLoaded('loaded'))
@@ -61,7 +64,7 @@ export default function Profile() {
       let colUrl = []
       let idCol = []
 
-      console.log(nfts)
+      //console.log(nfts)
 
       setUserNFTs(nfts.result)
       userNFTs.forEach(nft => {
@@ -72,43 +75,57 @@ export default function Profile() {
       setcollectionURL(colUrl)
       settokenIDcol(idCol)
 
-      console.log("suss", nfts.result) 
+      //console.log("suss", nfts.result) 
     }
   }
 
   async function getURI() {
     let uris = []
+    let coloruris = []
+    let normaluris = []
+    let roughnessuris = []
     let nfts = []
     let ids = []
     userNFTs.map(async (nft, index) => {
 
       try {    
-        const fullTokenURI = `https://dweb.link/ipfs/${nft.token_uri.substring(nft.token_uri.lastIndexOf('ipfs')).replace(/^ipfs:\/\//, "")}`    
-        console.log(fullTokenURI) 
+        const fullTokenURI = `https://dweb.link/${nft.token_uri.substring(nft.token_uri.lastIndexOf('ipfs')).replace(/^ipfs:\/\//, "")}`    
+       // console.log('d', fullTokenURI) 
         const meta = await axios.get(fullTokenURI) 
         if(meta.data.fileType.length != 0) {
-          console.log(meta)
-          console.log("joe", meta.data)   
+          //console.log(meta)
+          //console.log("joe", meta.data)   
           let item = meta.data.image
+          let item2 = meta.data.color
+          let item3 = meta.data.normal
+          let item4 = meta.data.roughness
           //console.log(item) 
           const uri = `https://dweb.link/ipfs/${item.replace(/^ipfs:\/\//, "")}`
+          const coloruri = `https://dweb.link/ipfs/${item2.replace(/^ipfs:\/\//, "")}`
+          const normaluri = `https://dweb.link/ipfs/${item3.replace(/^ipfs:\/\//, "")}`
+          const roughnessuri = `https://dweb.link/ipfs/${item4.replace(/^ipfs:\/\//, "")}`
           //console.log(uri)
-          console.log('this app a fraud')
           uris.push(uri)
+          coloruris.push(coloruri)
+          normaluris.push(normaluri)
+          roughnessuris.push(roughnessuri)
           ids.push(nft.token_uri.substring(0, nft.token_uri.indexOf("/")))
           nfts.push(meta.data)
         } 
       } catch (e) {
-        console.log("derivative of e", e)
+        //console.log("derivative of e", e)
       }
     }) 
     //console.log("x", nfts)
     setURIs(uris)
+    setColorMaps(coloruris)
+    setNormalMaps(normaluris)
+    setRoughnessMaps(roughnessuris)
     setNFTs(nfts)
     setNFTTokenIds(ids)
     setLoading('loaded')
-    console.log(nftURIs)
-    console.log(userNFTs)
+   // console.log('uriz', nftURIs)
+   // console.log('wer', userNFTs)
   }
 
   useEffect(() => {
@@ -130,40 +147,35 @@ export default function Profile() {
             <div className='h-96'>
 
             <Card
-              style={{ width: 400 }}
+              style={{ width: 400, borderColor: '#1C1C1C' }}
               cover={
                 <Canvas>
                   <Suspense fallback={<Loader />}>
                   <ambientLight intensity={0.2} />
                   <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} />
                   <pointLight position={[-10, -10, -10]} />
-                    <Model loader={nft.fileType} url={nftURIs[index]}/>
+                    <Model loader={nft.fileType} url={nftURIs[index]} colorMap={colorMaps[index]} normalMap={normalMaps[index]} roughnessMap={roughnessMaps[index]}/>
                     <OrbitControls />
                     <Environment preset="apartment" background />
                   </Suspense>
                 </Canvas>
               }
-              actions={[
-                <SettingOutlined key="setting" />,
-                <EditOutlined key="edit" />,
-                <EllipsisOutlined key="ellipsis" />,
-              ]}
             >            
-            <Link href={{
-                pathname: '/nfts/' + collectionURL[index] + "/" + tokenIDcol[index],
-                
-            }} key={nft.name} >
+
               <Meta
                 avatar={<Avatar src="https://joeschmoe.io/api/v1/random" />}
                 title={nft.name}
-                description="a part of the metaverse"
+                description="A Part of the Metaverse!"
               />            
-            </Link>
+
             </Card>
 
             </div>
           </div>
         ))}
+                    {theNFTs.map((nft, index) => (
+              <div key={index} style={{width:400}}/>
+            ))}
       </div>
       
       </>

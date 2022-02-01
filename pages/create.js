@@ -80,7 +80,7 @@ export default function Home() {
 
     const handleUpload = async (e) => {
       //setPreview(false);
-      console.log("upload handled")
+      //console.log("upload handled")
 
       if (e.target.files === null) {
         return
@@ -88,7 +88,7 @@ export default function Home() {
     
       const file = e.target.files[0]
       setFile(file)      
-      console.log('file', getFile)
+      //console.log('file', getFile)
       setFileType(file.name.substring(file.name.indexOf(".") + 1))
     }
 
@@ -97,7 +97,7 @@ export default function Home() {
       const web3 = new Web3(Moralis.provider)
 
         if(web3 && getFile !== undefined) {
-          console.log('mint workin?')
+         // console.log('mint workin?')
           const fileType = getFile.name.substring(getFile.name.lastIndexOf(".") + 1, getFile.name.length)
             
             const metadata = await client.store({
@@ -111,24 +111,24 @@ export default function Home() {
             });
             
             setFileType(fileType)
-            console.log("in mint", metadata)
+            //console.log("in mint", metadata)
 
             const contract = new web3.eth.Contract(nftABI, nftContract);
             const market = new web3.eth.Contract(marketABI, marketAddress);
             
             const accounts = await web3.eth.getAccounts();
 
-            console.log('price: ', price)
+            //console.log('price: ', price)
             const mintTx = await contract.methods.createToken(metadata.url).send({from: accounts[0]}, function(error, receipt) {
-              console.log(receipt)
+             // console.log(receipt)
               setTxres(receipt)
               return receipt
             });
-            console.log('who?', mintTx)
+            //console.log('who?', mintTx)
             const tokenId = mintTx.events.Transfer.returnValues.tokenId
-            console.log("tokenID", tokenId)
+           // console.log("tokenID", tokenId)
             const fee = await market.methods.getListingPrice().call({from: accounts[0]});
-            console.log('listingfee', fee)
+           // console.log('listingfee', fee)
 
             await market.methods.createMarketItem(nftContract, tokenId, web3.utils.toWei(price, 'ether')).send({from: accounts[0], value: fee});
             
@@ -154,21 +154,21 @@ export default function Home() {
     async function previewModel() {
       if (getFile === undefined) return
 
-      console.log('tempurl', URL.createObjectURL(getFile))
+     // console.log('tempurl', URL.createObjectURL(getFile))
       setURI(URL.createObjectURL(getFile))
 
       if(colorTexture !== undefined) {
-        console.log('colormap', URL.createObjectURL(colorTexture))
+       // console.log('colormap', URL.createObjectURL(colorTexture))
         setCURI(URL.createObjectURL(colorTexture))
       }
 
       if(normalTexture !== undefined) {
-        console.log('nmap', URL.createObjectURL(normalTexture))
+       // console.log('nmap', URL.createObjectURL(normalTexture))
         setNURI(URL.createObjectURL(normalTexture))
       }
 
       if(roughTexture !== undefined) {
-        console.log('rmap', URL.createObjectURL(roughTexture))
+       // console.log('rmap', URL.createObjectURL(roughTexture))
         setRURI(URL.createObjectURL(roughTexture))
       }
       
@@ -220,34 +220,34 @@ export default function Home() {
     }
 
     const handleCTextureUpload = async (e) => {
-      console.log("texture color uploaded")
+      //console.log("texture color uploaded")
       if (e.target.files === null) {
         return
       }
       const file2 = e.target.files[0] 
       setColorTexture(file2)      
-      console.log('e', file2)
-      console.log(colorTexture)
+      //console.log('e', file2)
+      //console.log(colorTexture)
     }
 
     const handleNTextureUpload = async (e) => {
-      console.log("texture normal uploaded")
+      //console.log("texture normal uploaded")
       if (e.target.files === null) {
         return 
       }
       const file3 = e.target.files[0]
       setNormalTexture(file3)
-      console.log(normalTexture)
+      //console.log(normalTexture)
     }
 
     const handleRTextureUpload = async (e) => {
-      console.log("texture roughness uploaded")
+     // console.log("texture roughness uploaded")
       if (e.target.files === null) {
         return
       }
       const file4 = e.target.files[0]
       setRoughTexture(file4)
-      console.log(roughTexture)
+      //console.log(roughTexture)
     }
 
     return (
@@ -319,7 +319,7 @@ export default function Home() {
                     </button>
                   </div>
 
-                  <button onClick={mintNFT} className="flex text-base px-9 py-3 rounded-2xl shadow-lg bg-[#1C1C1C] text-white hover:bg-[#D3B694] hover:text-white rounded-15xl hover:rounded-xl transition-all duration-600 ease-linear cursor-pointer">
+                  <button onClick={mintNFT} className="w-full flex justify-center my-3 text-base px-9 py-3 rounded-2xl shadow-lg bg-[#1C1C1C] text-white hover:bg-[#D3B694] hover:text-white rounded-15xl hover:rounded-xl transition-all duration-600 ease-linear cursor-pointer">
                       Mint Your NFT
                   </button>
 

@@ -47,7 +47,7 @@ export default function Profile() {
     const query = new Moralis.Query('NFTData');
     query.equalTo('tokenId', nftId);
     const results = await query.find();
-    console.log('nftz', results)
+    //console.log('nftz', results)
     setNFTs(results)
     setLoading('loaded')
   }

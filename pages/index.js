@@ -35,7 +35,7 @@ export default function Home() {
     Moralis.start({appId: 'lJOarUuAlWplKRCkGjvNNfQl2bY8OFAExeETwJS5', serverUrl: 'https://h9gw6kcvgoj4.usemoralis.com:2053/server'});
     const query = new Moralis.Query('NFTData');
     const results = await query.find();
-    console.log('nftz', results)
+    //console.log('nftz', results)
     setNFTs(results)
   }
 
@@ -43,7 +43,7 @@ export default function Home() {
     x()
   }, [])
 
-  console.log('nftz state', theNFTs)
+  //console.log('nftz state', theNFTs)
 
   return (
     <>
@@ -59,11 +59,11 @@ export default function Home() {
 
           <div className='w-full pr-8 m-0 mt-4 text-white flex justify-between flex-wrap mb-8'>
             {theNFTs.map((nft, index) => (
-              <div key={index} className='mb-8'>
+              <div key={index} className='mb-8 cursor-pointer'>
                 <div className='h-96'>
 
                 <Card
-                  style={{ width: 400 }}
+                  style={{ width: 400, borderColor: '#141414' }}
                   cover={
                     <Canvas>
                       <Suspense fallback={<Loader />}>
@@ -76,11 +76,7 @@ export default function Home() {
                       </Suspense>
                     </Canvas>
                   }
-                  actions={[
-                    <SettingOutlined key="setting" />,
-                    <EditOutlined key="edit" />,
-                    <EllipsisOutlined key="ellipsis" />,
-                  ]}
+
                 >            
                 <Link href={{
                     pathname: '/nfts/' + nft.attributes.contract + "/" + nft.attributes.tokenId,
@@ -96,6 +92,9 @@ export default function Home() {
 
                 </div>
               </div>
+            ))}
+            {theNFTs.map((nft, index) => (
+              <div key={index} style={{width:400}}/>
             ))}
           </div>
         </main>
