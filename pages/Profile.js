@@ -56,10 +56,12 @@ export default function Profile() {
     
   async function getUserNFTs () {
     if(isAuthenticated) {
-      const nfts = await Moralis.Web3API.account.getNFTs({chain: 'avalanche testnet', address: user.get("ethAddress") }).then(setNFTsLoaded('loaded'))
+      const nfts = await Moralis.Web3API.account.getNFTsForContract({chain: 'avalanche testnet', address: user.get("ethAddress"), token_address: nftContract }).then(setNFTsLoaded('loaded'))
 
       let colUrl = []
       let idCol = []
+
+      console.log(nfts)
 
       setUserNFTs(nfts.result)
       userNFTs.forEach(nft => {
@@ -114,7 +116,7 @@ export default function Profile() {
     getURI()
   }, [loading])  
  
-  if(loading === 'loaded' && nftsLoaded === 'loaded' && !userNFTs.length) return <><h1>Loading ... </h1></>
+  if(loading === 'loaded' && nftsLoaded === 'loaded' && !userNFTs.length) return <div className='h-5/6 w-full flex flex-col items-center place-content-center'><h1 className='mt-8 text-xl font-bold'>You have no 3D NFTs! Purchase some from the Marketplace!</h1></div>
   else {
     return (
       <>   
