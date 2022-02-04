@@ -1,6 +1,6 @@
 import { Canvas } from "@react-three/fiber";
 import { useLoader } from "@react-three/fiber";
-import {
+import { 
   Environment,
   OrbitControls,
   Html,
