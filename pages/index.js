@@ -63,7 +63,7 @@ export default function Home() {
                 <div className='h-96'>
 
                 <Card
-                  style={{ width: 400, borderColor: '#141414' }}
+                  style={{ width: 400, borderColor: '#ffffff' }}
                   cover={
                     <Canvas>
                       <Suspense fallback={<Loader />}>
@@ -72,7 +72,7 @@ export default function Home() {
                       <pointLight position={[-10, -10, -10]} />
                         <Model loader={nft.attributes.loader} url={nft.attributes.model} colorMap={nft.attributes.color} normalMap={nft.attributes.normal} roughnessMap={nft.attributes.roughness}/>
                         <OrbitControls autoRotate />
-                        <color attach='background' args={['#121212']}></color>
+                        <color attach='background' args={['#dfdfdf']}></color>
                       </Suspense>
                     </Canvas>
                   }

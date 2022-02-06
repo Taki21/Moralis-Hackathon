@@ -68,40 +68,54 @@ export default function Profile() {
   }
    
   return (  
-    <div className='flex mr-8 mt-8'>
-      <div className='w-1/2'>
-        {nfts.map((nft) => (
-          <Canvas>
-            <Suspense fallback={<Loader />}>
-            <ambientLight intensity={0.2} />
-            <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} />
-            <pointLight position={[-10, -10, -10]} /> 
+    <>
+      <div className='flex mr-8 mt-8 h-[85.5%]'>
+        <div className='w-full'>
+          {nfts.map((nft) => (
+            <Canvas>
+              <Suspense fallback={<Loader />}>
+              <ambientLight intensity={0.2} />
+              <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} />
+              <pointLight position={[-10, -10, -10]} /> 
 
-                <Model loader={nft.attributes.loader} url={nft.attributes.model} colorMap={nft.attributes.color} normalMap={nft.attributes.normal} roughnessMap={nft.attributes.roughness}/>
-                  <></>
-                
-                <OrbitControls autoRotate/>
-                <Environment preset='park' background />
-            </Suspense> 
-          </Canvas>
-        ))}
+                  <Model loader={nft.attributes.loader} url={nft.attributes.model} colorMap={nft.attributes.color} normalMap={nft.attributes.normal} roughnessMap={nft.attributes.roughness}/>
+                    <></>
+                  
+                  <OrbitControls autoRotate/>
+                  <Environment preset='dawn' background />
+              </Suspense> 
+            </Canvas>
+          ))}
+        </div>
       </div>
 
-      <div className='flex flex-col justify-top items-center place-content-center p-12 w-full bg-[#101011] rounded-r-3xl'>
+      <div className='absolute bottom-16 right-16 flex justify-top items-center place-content-center p-6 bg-[#dfdfdf] rounded-3xl bg-clip-padding backdrop-filter backdrop-blur-xl bg-opacity-40 select-none'>
         {nfts.map((nft) => (
           <>
-            <h1 className='text-3xl font-bold'>{nft.attributes.name}</h1>
-            <h2 className='text-base font-bold pt-4'>Seller: {nft.attributes.seller}</h2>
-            <h1 className='text-xl py-4 italic'>{nft.attributes.description}</h1>
-            <h1 className='text-3xl pb-4 font-bold'>Price: {nft.attributes.price} AVAX</h1>
-            <button onClick={buyNFT} className="flex text-base px-9 py-3 rounded-2xl shadow-lg bg-[#1C1C1C] text-white hover:bg-[#D3B694] hover:text-white rounded-15xl hover:rounded-xl transition-all duration-600 ease-linear cursor-pointer">
-                Purchase NFT
-            </button>
+            <div className='border-r-[#707070] border-r mr-8'>
+              <div className='flex flex-col mr-4'>
+                <div className='flex'>
+                  <h1 className='text-xl font-bold'>{nft.attributes.name}:&nbsp;</h1>
+                  <h1 className='text-xl'>{nft.attributes.description}</h1>
+                </div>
+
+                <div className='flex flex-col mr-4'>
+                  <h1 className='text-5xl font-bold text-[#b88f60]'>{parseFloat(nft.attributes.price).toFixed(2)} AVAX</h1>      
+                  <h1 className='text-base m-0'>Price: $78.31</h1>      
+                </div>
+              </div>
+            </div>
+
+            <div className='flex flex-col items-center'>
+              <h2 className='text-base font-bold pb-2'>Seller: {nft.attributes.seller.substring(0, 5) + '...' + nft.attributes.seller.substring((nft.attributes.seller.length - 4), nft.attributes.seller.length)}</h2>
+              <button onClick={buyNFT} className="flex text-base px-9 py-3 rounded-2xl shadow-lg bg-[#b88f60] text-[#ffffff] hover:bg-[#ffffff] hover:text-[#1c1c1c] rounded-15xl hover:rounded-xl transition-all duration-600 ease-linear cursor-pointer">
+                  Purchase NFT
+              </button>
+            </div>
           </>
         ))}
       </div>
-
-    </div>
+    </>
   )
    
 } 
